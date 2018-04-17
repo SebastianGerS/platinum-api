@@ -1,6 +1,6 @@
 {
     "name": "api",
     "project": "platinum",
-    "domain": "platinum-dev.api.chas.school",
+    "domain": "api.platinum.chas.school",
     "template": "docker-compose"
 }

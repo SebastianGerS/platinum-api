@@ -9,7 +9,7 @@ services:
     labels:
       traefik.backend: "express_api"
       traefik.docker.network: "host"
-      traefik.frontend.rule: "Host:platinum-dev.client.chas.school"
+      traefik.frontend.rule: "Host:api.platinum.chas.school"
     volumes:
       - ./:/home/node/app
     ports:
