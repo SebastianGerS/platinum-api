@@ -1,6 +1,7 @@
 version: '3.5'
 services:
   express_api:
+    conatiner_name: platinum-dev-api-express_api
     build: .
     image: express_api
     user: node
