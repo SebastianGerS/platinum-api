@@ -10,9 +10,9 @@ export default (sequelize, DataTypes) => {
     type: {
         type: DataTypes.ENUM('basic', 'premium', 'onetime-premium'),
         required: true,
-    }
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
+    },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
     });
 
 

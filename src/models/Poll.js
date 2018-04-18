@@ -17,10 +17,10 @@ export default (sequelize, DataTypes) => {
     },
     max_num_of_votes: DataTypes.INTEGER,
     status: DataTypes.STRING,
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
-    closedAt: Sequelize.DATE,
-    duration: DataTypes.INTEGER,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+    closedAt: DataTypes.DATE,
+    duration: DataTypes.INTEGER
     });
 
 

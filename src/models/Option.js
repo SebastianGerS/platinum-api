@@ -9,7 +9,9 @@
 'use strict'
 
 export default (sequelize, DataTypes) => {
+
     const Option = sequelize.define('Option', {
+
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -19,21 +21,20 @@ export default (sequelize, DataTypes) => {
         type:DataTypes.STRING,
         required:true
     },
-    createdAt: Sequelize.DATE,
+    createdAt: DataTypes.DATE,
     });
 
 
     Option.associate = (models) => {
+
     Option.belongsToMany(models.Question, {
-        as: 'Question',
-        foreignKey: 'id'
+        through: 'QuestionOption'
     })
 
     Option.hasMany(models.Vote, {
         as: 'Votes',
-        foreignKey: 'id'
     })
-    
+
     }
 
     return Option

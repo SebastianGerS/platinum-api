@@ -7,20 +7,21 @@ export default (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
     },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
     });
 
 
     Answer.associate = (models) => {
         Answer.belongsTo(models.Poll, {
             as: 'Poll',
-            foreignKey: 'id'
+            foreignKey: 'id',
         })
 
         Answer.hasMany(models.Vote, {
             as: 'Votes',
-            foreignKey: 'id'
+            foreignKey: 'id',
+            
         })
     }
 

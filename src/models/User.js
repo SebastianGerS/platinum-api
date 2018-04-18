@@ -35,6 +35,16 @@ export default (sequelize, DataTypes) => {
       as: 'Sessions',
       foreignKey: 'userId'
     })
+
+    User.hasMany(models.Questionnaire, {
+      as: 'Questionnaires',
+      foreignKey: 'id'
+    })
+
+    User.hasMany(models.Poll, {
+      as: 'Polls',
+      foreignKey: 'id'
+    })
   }
 
   return User

@@ -7,8 +7,8 @@ export default (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
     },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
     });
 
 
@@ -18,8 +18,12 @@ export default (sequelize, DataTypes) => {
             foreignKey: 'id'
         })
 
-        Vote.belongsToManny(models.Option, {
+        Vote.belongsToMany(models.Option, {
             as: 'Options',
+            through: 'OptionVote'
+        })
+        Vote.belongsTo(models.Answer, {
+            as: 'Answer',
             foreignKey: 'id'
         })
     }

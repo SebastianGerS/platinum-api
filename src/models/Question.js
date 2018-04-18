@@ -23,8 +23,8 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.ENUM('select-one', 'multiselect', 'short-text'),
         required:true
     },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
     });
 
 
@@ -35,11 +35,12 @@ export default (sequelize, DataTypes) => {
     })
 
     Question.hasMany(models.Option, {
-        as: 'Option',
-        foreignKey: 'id'
+        as: 'Options',
+        foreignKey: 'id',
+
     })
-    Question.hasMany(models.Answer, {
-        as: 'An',
+    Question.hasMany(models.Vote, {
+        as: 'Vote',
         foreignKey: 'id'
     })
     }
