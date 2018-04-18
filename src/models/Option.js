@@ -1,11 +1,3 @@
-
-// option: {	
-// 	$id:  {type: Schema.Types.ObjectID},
-// 	name: {type: String, required:true}
-// }
-
-
-
 'use strict'
 
 export default (sequelize, DataTypes) => {
@@ -31,8 +23,9 @@ export default (sequelize, DataTypes) => {
         through: 'QuestionOption'
     })
 
-    Option.hasMany(models.Vote, {
+    Option.belongsToMany(models.Vote, {
         as: 'Votes',
+        through: 'OptionVote'
     })
 
     }

@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
         unique:true
     },
     max_num_of_votes: DataTypes.INTEGER,
-    status: DataTypes.STRING,
+    status: DataTypes.ENUM('active', 'closed'),
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     closedAt: DataTypes.DATE,

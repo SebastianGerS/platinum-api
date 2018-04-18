@@ -1,11 +1,3 @@
-// question: {	
-// 	$id:  {type: Schema.Types.ObjectID},
-// 	name: {type: String, required:true},
-// 	type: {type:String, enum:['select-one”, 'multiselect”, 'short-text”], required:true}
-// 	options: [ {type: Schema.Types.ObjectID, ref: option, required:true}]
-// }
-
-
 'use strict'
 
 export default (sequelize, DataTypes) => {
@@ -34,9 +26,9 @@ export default (sequelize, DataTypes) => {
         foreignKey: 'id'
     })
 
-    Question.hasMany(models.Option, {
+    Question.belongsToMany(models.Option, {
         as: 'Options',
-        foreignKey: 'id',
+        through: 'QuestionOption'
 
     })
     Question.hasMany(models.Vote, {
