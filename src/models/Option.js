@@ -13,14 +13,20 @@ export default (sequelize, DataTypes) => {
         type:DataTypes.STRING,
         required:true
     },
+    order: {
+        type:DataTypes.INTEGER,
+        required:true
+    },
     createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
     });
 
 
     Option.associate = (models) => {
 
-    Option.belongsToMany(models.Question, {
-        through: 'QuestionOption'
+    Option.belongsTo(models.Question, {
+        as: 'Question',
+        foreignKey: 'id'
     })
 
     Option.belongsToMany(models.Vote, {

@@ -15,6 +15,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.ENUM('select-one', 'multiselect', 'short-text'),
         required:true
     },
+    order: {
+        type: DataTypes.INTEGER,
+        required:true
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
     });
@@ -26,10 +30,8 @@ export default (sequelize, DataTypes) => {
         foreignKey: 'id'
     })
 
-    Question.belongsToMany(models.Option, {
+    Question.hasMany(models.Option, {
         as: 'Options',
-        through: 'QuestionOption'
-
     })
     Question.hasMany(models.Vote, {
         as: 'Vote',
