@@ -16,6 +16,10 @@ module.exports = {
       type: {
         type: Sequelize.ENUM('select-one', 'multiselect', 'short-text')
       },
+      order: {
+        type: Sequelize.INTEGER,
+        required: true
+      },
       questionnaire: {
         type: Sequelize.INTEGER,
         references: {

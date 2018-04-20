@@ -13,10 +13,22 @@ module.exports = {
         type: Sequelize.STRING,
         required: true
       },
+      question: {
+        type: Sequelize.INTEGER,
+        required: true
+      },
+      order: {
+        type: Sequelize.INTEGER,
+        required: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
     })
   },
   down: (queryInterface, Sequelize) => {

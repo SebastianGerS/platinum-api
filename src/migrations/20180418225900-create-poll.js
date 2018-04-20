@@ -8,20 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      link: {
-        type: Sequelize.STRING,
-        unique:true
-        },
-      qr_code: {
-        type: Sequelize.STRING,
-        unique:true
-      },
-      max_num_of_votes: {
-        type: Sequelize.INTEGER
-      },
-      status: {
-        type: Sequelize.ENUM('active', 'closed')
-      },
       user: {
         type: Sequelize.INTEGER,
         references: {
@@ -39,6 +25,20 @@ module.exports = {
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'
+      },
+      link: {
+        type: Sequelize.STRING,
+        unique:true
+        },
+      qr_code: {
+        type: Sequelize.STRING,
+        unique:true
+      },
+      status: {
+        type: Sequelize.ENUM('active', 'closed')
+      },
+      max_num_of_votes: {
+        type: Sequelize.INTEGER
       },
       duration: {
         type: Sequelize.INTEGER,

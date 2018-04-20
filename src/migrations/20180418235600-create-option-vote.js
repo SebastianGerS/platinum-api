@@ -6,7 +6,7 @@ module.exports = {
       optionId: {
         type: Sequelize.INTEGER,
         references: {
-            model: 'Questions',
+            model: 'Options',
             key: 'id'
         },
         onUpdate: 'cascade',
