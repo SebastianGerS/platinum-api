@@ -5,9 +5,9 @@ module.exports = {
     return queryInterface.bulkInsert('Questions', [
       question('Do you Like Questions?', 'select-one',1 ,1, mockDateTime(20)),
       question('Why?', 'select-one', 2, 1, mockDateTime(20)),
-      question('Do you know how you are?', 'select-one', 1, 2, mockDateTime(20)),
+      question('Do you know who you are?', 'select-one', 1, 2, mockDateTime(20)),
       question('Which do you prefer?', 'select-one', 1, 3, mockDateTime(20)),
-      question('Who is the greates?', 'select-one', 2, 3, mockDateTime(20)),
+      question('Who is the greatest?', 'select-one', 2, 3, mockDateTime(20)),
       question('Who won the 2017 Wimbeldon final?', 'select-one', 1, 4, mockDateTime(20)),
       question('Who won the 2007 Wimbeldon final?', 'select-one', 2, 4, mockDateTime(20)),
       question('Which mood are you in to day?', 'select-one', 1, 5, mockDateTime(20)),
