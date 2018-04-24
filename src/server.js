@@ -29,7 +29,7 @@ app.listen(port, () => {
 });
 
 app.use(cors({
-  origin: process.env.ALLOW_ORIGIN,
+  origin: allowOrigin,
   credentials: true,
   allowedHeaders: 'X-Requested-With, Content-Type, Authorization',
   methods: 'GET, POST, PATCH, PUT, DELETE, OPTIONS',

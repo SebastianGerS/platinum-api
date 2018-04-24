@@ -6,10 +6,6 @@ services:
     image: API_CONTAINER_NAME
     working_dir: /home/node/app
     labels:
-      exoframe.deployment: platinum-api-dev
-      exoframe.user: root
-      exoframe.project: platinum-api-dev
-      traefik.backend: platinum-api-dev
       traefik.enable: "true"
       traefik.frontend.rule: "Host:TRAEFIK_ENV.chas.school"
     volumes:
@@ -23,11 +19,6 @@ services:
   DB_CONTAINER_NAME:
     container_name: DB_CONTAINER_NAME
     image: onjin/alpine-postgres:9.6
-    labels: 
-      exoframe.deployment: platinum-db-dev
-      exoframe.user: root
-      exoframe.project: platinum-api-dev
-      traefik.backend: platinum-api-dev
     volumes:
       - DB_CONTAINER_NAME:/var/lib/postgresql/data
     env_file:
