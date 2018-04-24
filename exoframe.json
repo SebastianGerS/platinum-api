@@ -1,6 +1,6 @@
 {
-    "name": "api",
-    "project": "platinum",
-    "domain": "platinum-dev.api.chas.school",
+    "name": "platinum-api",
+    "project": "PROJECT_NAME",
+    "domain": "TREAFIK_ENV.chas.school",
     "template": "docker-compose"
 }
