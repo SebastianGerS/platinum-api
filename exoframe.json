@@ -1,5 +1,5 @@
 {
-    "name": "platinum-api",
+    "name": "EXOFRAME_NAME",
     "project": "PROJECT_NAME",
     "domain": "TREAFIK_ENV.chas.school",
     "template": "docker-compose"
