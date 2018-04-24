@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars, import/no-unresolved, import/extensions */
-import { TestScheduler } from 'rx';
-
 export default {
   list(req, res) {
     res.status(200).send({

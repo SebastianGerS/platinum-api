@@ -1,32 +1,30 @@
-'use strict'
-
 export default (sequelize, DataTypes) => {
-    const Vote = sequelize.define('Vote', {
+  const Vote = sequelize.define('Vote', {
     id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
     createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE
+    updatedAt: DataTypes.DATE,
+  });
+
+
+  Vote.associate = (models) => {
+    Vote.belongsTo(models.Question, {
+      as: 'Question',
+      foreignKey: 'id',
     });
 
+    Vote.belongsToMany(models.Option, {
+      as: 'Options',
+      through: 'OptionVote',
+    });
+    Vote.belongsTo(models.Answer, {
+      as: 'Answer',
+      foreignKey: 'id',
+    });
+  };
 
-    Vote.associate = (models) => {
-        Vote.belongsTo(models.Question, {
-            as: 'Question',
-            foreignKey: 'id'
-        })
-
-        Vote.belongsToMany(models.Option, {
-            as: 'Options',
-            through: 'OptionVote'
-        })
-        Vote.belongsTo(models.Answer, {
-            as: 'Answer',
-            foreignKey: 'id'
-        })
-    }
-
-    return Vote
-}
+  return Vote;
+};
