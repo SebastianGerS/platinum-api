@@ -6,10 +6,6 @@ services:
     image: express_api
     user: node
     working_dir: /home/node/app
-    labels:
-      traefik.backend: "express_api"
-      traefik.docker.network: "host"
-      traefik.frontend.rule: "Host:platinum-dev.api.chas.school"
     volumes:
       - ./:/home/node/app
     environment:
