@@ -26,4 +26,11 @@ export default (app) => {
   app.patch('/tests/:id', C.Tests.update);
   app.put('/tests/:id', C.Tests.update);
   app.delete('/tests/:id', C.Tests.destroy);
+
+  app.get('/polls', C.Polls.list);
+  app.get('/users/:userId/polls', C.Polls.find);
+  app.put('/users/:userId/polls/:pollId', C.Polls.update);
+  app.delete('/users/:userId/polls/:pollId', C.Polls.destroy);
+  app.get('/polls/:pollId', C.Polls.findOne);
+  app.post('/polls', C.Polls.create);
 };
