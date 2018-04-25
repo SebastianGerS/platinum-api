@@ -5,6 +5,7 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    pollId: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   });

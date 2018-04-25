@@ -36,10 +36,10 @@ module.exports = {
 
 const Moment = require('moment');
 
-function answer(poll, date) {
+function answer(pollId, date) {
   const newDate = new Date(date);
   const data = {
-    poll,
+    pollId,
     createdAt: newDate,
     updatedAt: newDate,
   };

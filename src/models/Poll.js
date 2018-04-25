@@ -13,6 +13,8 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
     },
+    userId: DataTypes.INTEGER,
+    questionnaireId: DataTypes.INTEGER,
     maxNumOfVotes: DataTypes.INTEGER,
     status: DataTypes.ENUM('active', 'closed'),
     createdAt: DataTypes.DATE,

@@ -72,10 +72,10 @@ module.exports = {
 
 const Moment = require('moment');
 
-function vote(question, answer, date) {
+function vote(questionId, answer, date) {
   const newDate = new Date(date);
   const data = {
-    question,
+    questionId,
     answer,
     createdAt: newDate,
     updatedAt: newDate,

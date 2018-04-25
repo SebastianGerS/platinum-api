@@ -28,11 +28,11 @@ module.exports = {
 
 const Moment = require('moment');
 
-function option(name, question, order, date) {
+function option(name, questionId, order, date) {
   const newDate = new Date(date);
   const data = {
     name,
-    question,
+    questionId,
     order,
     createdAt: newDate,
     updatedAt: newDate,

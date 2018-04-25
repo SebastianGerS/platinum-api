@@ -10,7 +10,7 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    poll: {
+    pollId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Polls',

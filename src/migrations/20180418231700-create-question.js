@@ -21,7 +21,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       required: true,
     },
-    questionnaire: {
+    questionnaireId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Questionnaires',

@@ -16,14 +16,14 @@ module.exports = {
 
 const Moment = require('moment');
 
-function poll(user, questionnaire, link, qrCode, status, duration, date) {
+function poll(userId, questionnaireId, link, qrCode, status, duration, date) {
   const newDate = new Date();
   const closedDate = new Date(date);
   let maxVotes;
 
   const data = {
-    user,
-    questionnaire,
+    userId,
+    questionnaireId,
     link,
     qrCode,
     status,

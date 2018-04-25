@@ -14,8 +14,14 @@ module.exports = {
       type: Sequelize.STRING,
       required: true,
     },
-    question: {
+    questionId: {
       type: Sequelize.INTEGER,
+      references: {
+        model: 'Questions',
+        key: 'id',
+      },
+      onUpdate: 'cascade',
+      onDelete: 'cascade',
       required: true,
     },
     order: {
