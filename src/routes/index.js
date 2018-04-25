@@ -27,7 +27,7 @@ export default (app) => {
   app.put('/tests/:id', C.Tests.update);
   app.delete('/tests/:id', C.Tests.destroy);
 
-  app.get('/polls', C.Polls.list);
+  app.get('/polls', authBearer(), C.Polls.list);
   app.get('/users/:userId/polls', authBearer(), C.Polls.find);
   app.put('/users/:userId/polls/:pollId', authBearer(), C.Polls.update);
   app.delete('/users/:userId/polls/:pollId', authBearer(), C.Polls.destroy);
