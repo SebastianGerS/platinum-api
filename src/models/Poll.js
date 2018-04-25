@@ -1,9 +1,8 @@
 export default (sequelize, DataTypes) => {
   const Poll = sequelize.define('Poll', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       primaryKey: true,
-      autoIncrement: true,
     },
     link: {
       type: DataTypes.STRING,
