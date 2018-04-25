@@ -9,6 +9,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.ENUM('basic', 'premium', 'onetime-premium'),
       required: true,
     },
+    userId: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   });
@@ -20,14 +21,14 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'userId',
     });
 
-    Questionnaire.hasOne(models.Poll, {
+    Questionnaire.hasMany(models.Poll, {
       as: 'Poll',
-      foreignKey: 'id',
+      foreignKey: 'questionnaireId',
     });
 
     Questionnaire.hasMany(models.Question, {
       as: 'Question',
-      foreignKey: 'id',
+      foreignKey: 'questionnaireId',
     });
   };
 

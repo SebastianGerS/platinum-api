@@ -5,6 +5,7 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    questionnaireId: DataTypes.INTEGER,
     name: {
       type: DataTypes.STRING,
       required: true,
@@ -30,10 +31,11 @@ export default (sequelize, DataTypes) => {
 
     Question.hasMany(models.Option, {
       as: 'Options',
+      foreignKey: 'questionId',
     });
     Question.hasMany(models.Vote, {
       as: 'Vote',
-      foreignKey: 'id',
+      foreignKey: 'questionId',
     });
   };
 

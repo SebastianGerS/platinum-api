@@ -16,12 +16,12 @@ module.exports = {
 
 const Moment = require('moment');
 
-function questionnaire(title, type, user, date) {
+function questionnaire(title, type, userId, date) {
   const newDate = new Date(date);
   const data = {
     title,
     type,
-    user,
+    userId,
     createdAt: newDate,
     updatedAt: newDate,
   };

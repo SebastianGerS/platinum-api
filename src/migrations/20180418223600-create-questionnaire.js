@@ -17,7 +17,7 @@ module.exports = {
       allowNull: false,
       type: Sequelize.ENUM('basic', 'premium', 'onetime-premium'),
     },
-    user: {
+    userId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Users',

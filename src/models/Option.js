@@ -6,6 +6,7 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    questionId: DataTypes.INTEGER,
     name: {
       type: DataTypes.STRING,
       required: true,

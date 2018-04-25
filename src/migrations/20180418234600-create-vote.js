@@ -10,7 +10,7 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    question: {
+    questionId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Questions',

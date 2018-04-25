@@ -38,12 +38,12 @@ export default (sequelize, DataTypes) => {
 
     User.hasMany(models.Questionnaire, {
       as: 'Questionnaires',
-      foreignKey: 'id',
+      foreignKey: 'userId',
     });
 
     User.hasMany(models.Poll, {
       as: 'Polls',
-      foreignKey: 'id',
+      foreignKey: 'userId',
     });
   };
 

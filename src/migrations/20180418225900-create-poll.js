@@ -10,7 +10,7 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    user: {
+    userId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Users',
@@ -19,7 +19,7 @@ module.exports = {
       onUpdate: 'cascade',
       onDelete: 'cascade',
     },
-    questionnaire: {
+    questionnaireId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Questionnaires',
@@ -59,7 +59,7 @@ module.exports = {
     },
   })
     .then(() => {
-      queryInterface.addIndex('Polls', { fields: ['link', 'qr_code', 'status', 'duration'] });
+      queryInterface.addIndex('Polls', { fields: ['link', 'qrCode', 'status', 'duration'] });
     }),
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Polls'),
 };
