@@ -98,14 +98,15 @@ export function findOne(options) {
 }
 
 export function create(options) {
-  const { res, body } = options;
+  const { res, userId, body } = options;
   const {
-    userId, questionnaireId,
+    questionnaireId,
   } = body;
 
   DB.Questionnaire
     .find({ where: { id: questionnaireId } })
     .then((Questionnaire) => {
+      if (Questionnaire.dataValues.userId !== userId) { return res.status(401).send({ message: 'You can\'t create Polls from questionnaires that are not yours' }); }
       let maxNumOfVotes;
       if (Questionnaire.dataValues.type === 'basic') {
         maxNumOfVotes = 50;
@@ -149,7 +150,7 @@ export function create(options) {
 
 export function update(options) {
   const {
-    res, query,
+    res, userId, query,
   } = options;
 
   findOne({
@@ -158,6 +159,7 @@ export function update(options) {
     returnData: true,
   })
     .then((Poll) => {
+      if (Poll.json.userId !== userId) { return res.status(401).send({ message: 'You can\'t update Polls that are not yours' }); }
       if (Poll.json.status !== 'active') { return res.status(403).send({ message: 'This poll is already closed' }); }
 
       DB.Poll
@@ -183,7 +185,7 @@ export function update(options) {
 }
 
 export function destroy(options) {
-  const { res, query } = options;
+  const { res, userId, query } = options;
   findOne({
     res,
     where: query,
@@ -191,7 +193,8 @@ export function destroy(options) {
   })
     .then((Poll) => {
       console.log(Poll);
-      if (Poll.json.status === 'active') { return res.status(403).send({ message: 'you cant delete a active pole, please close it first' }); }
+      if (Poll.json.userId !== userId) { return res.status(401).send({ message: 'You can\'t delete Polls that are not yours' }); }
+      if (Poll.json.status === 'active') { return res.status(403).send({ message: 'You can\'t delete a active pole, please close it first' }); }
       DB.Poll
         .destroy({ where: query })
         .then(() => res.status(200).send())

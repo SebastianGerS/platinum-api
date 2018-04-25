@@ -28,7 +28,7 @@ export default {
       res,
       jsonData: true,
       query: {
-        userId: req.params.userId,
+        userId: req.user.dataValues.userId,
       },
     });
   },
@@ -44,15 +44,16 @@ export default {
   create(req, res) {
     Polls.create({
       res,
+      userId: req.user.dataValues.userId,
       body: req.body,
     });
   },
   update(req, res) {
     Polls.update({
       res,
+      userId: req.user.dataValues.userId,
       query: {
         id: req.params.pollId,
-        userId: req.params.userId,
       },
       body: req.body,
     });
@@ -60,9 +61,9 @@ export default {
   destroy(req, res) {
     Polls.destroy({
       res,
+      userId: req.user.dataValues.userId,
       query: {
         id: req.params.pollId,
-        userId: req.params.userId,
       },
     });
   },
