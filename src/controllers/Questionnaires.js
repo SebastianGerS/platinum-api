@@ -47,7 +47,10 @@ export default {
     Questionnaires.update({
       res,
       body: req.body,
-      questionnaireId: req.params.questionnaireId,
+      userId: req.user.dataValues.userId,
+      query: {
+        id: req.params.questionnaireId,
+      },
     });
   },
 

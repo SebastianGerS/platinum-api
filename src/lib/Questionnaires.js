@@ -74,6 +74,35 @@ export function create(options) {
     });
 }
 
+export function update(options) {
+  const {
+    res, userId, body, query,
+  } = options;
+  const { title } = body;
+
+  find({
+    res,
+    query,
+    returnData: true,
+  })
+    .then((Questionnaire) => {
+      if (userId !== Questionnaire.object[0].userId) { return res.status(400).send({ message: 'You can not update the title of this questionnaire...' }); }
+
+      DB.Questionnaire.update({
+        title,
+        updatedAt: new Date(),
+      }, {
+        where: query,
+      })
+        .then(Questionnaire => res.status(200).send({ message: 'Successfully updated the title - woho!' }))
+        .catch((error) => {
+          console.log(error);
+
+          return res.status(400).send(error);
+        });
+    });
+}
+
 function jsonQuestionnaires(Questionnaires) {
   return Questionnaires
     .map(Questionnaire => jsonQuestionnaire(Questionnaire));
