@@ -28,9 +28,9 @@ export default (app) => {
   app.delete('/tests/:id', C.Tests.destroy);
 
   app.get('/polls', authBearer(), C.Polls.list);
-  app.get('/users/:userId/polls', authBearer(), C.Polls.find);
-  app.put('/users/:userId/polls/:pollId', authBearer(), C.Polls.update);
-  app.delete('/users/:userId/polls/:pollId', authBearer(), C.Polls.destroy);
+  app.get('/my-polls', authBearer(), C.Polls.find);
+  app.post('/my-polls', authBearer(), C.Polls.create);
+  app.put('/my-polls/:pollId', authBearer(), C.Polls.update);
+  app.delete('/my-polls/:pollId', authBearer(), C.Polls.destroy);
   app.get('/polls/:pollId', C.Polls.findOne);
-  app.post('/polls', authBearer(), C.Polls.create);
 };
