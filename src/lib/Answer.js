@@ -5,26 +5,20 @@ import * as Paths from '../lib/Paths';
 import { filters, pageCount, orderBy } from '../helpers/Data';
 import { rand } from '../helpers/Math';
 
-export default {
-  list(req, res) {
-    Promise
-      .all([
-        Answer.list({
-          res,
-          query: req.query,
-          returnData: true,
-          jsonData: true,
-        }),
-        Answer.pages({ query: req.query }),
-      ])
-      .then((promises) => {
-        res.status(200).send({
-          rows: promises[0],
-          pages: promises[1],
-        });
-      })
-      .catch((error) => {
-        res.status(400).send(error);
-      });
-  }
+export function list(options) {
+  const {
+    res, returnData, jsonData,
+  } = options;
+
+  return DB.Answer
+    .findAll({})
+    .then((Answers) => {
+      const data = jsonData ? jsonAnswers(Answers) : Answers;
+      if (returnData) return data;
+      return res.status(data ? 200 : 404).send(data);
+    })
+    .catch((error) => {
+      console.log(error);
+      return returnData ? error : res.status(400).send(error);
+    });
 }
