@@ -4,12 +4,7 @@ export default {
     list(req, res) {
       Promise
         .all([
-          Answer.list({
-            res,
-            query: req.query,
-            returnData: true,
-            jsonData: true,
-          })
+         
         ])
         .then((promises) => {
           res.status(200).send({
@@ -19,7 +14,7 @@ export default {
           });
         })
         .catch((error) => {
-            message: 'There was an error.',
+            message: 'There was an error!',
           res.status(400).send(error);
         });
     }
