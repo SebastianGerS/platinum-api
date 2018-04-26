@@ -18,6 +18,9 @@ export default (app) => {
   app.put('/users/:userId', authBearer(), C.Users.update);
   app.delete('/users/:userId', authBearer(), C.Users.destroy);
 
+  /* Answer */
+  app.get('/answer', C.Answer.list);
+
   /* Tests */
   app.get('/tests', C.Tests.list);
   app.get('/tests/custom-method', C.Tests.customMethod); // Should be placed before other requests with dynamic values
@@ -27,6 +30,4 @@ export default (app) => {
   app.put('/tests/:id', C.Tests.update);
   app.delete('/tests/:id', C.Tests.destroy);
 
-  /* Answer */
-  app.get('/answer', C.Answer.list);
 };
