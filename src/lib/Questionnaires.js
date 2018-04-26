@@ -33,6 +33,23 @@ export function pages({ query }) {
     .then(count => pageCount(query, count));
 }
 
+export function find(options) {
+  const { res, returnData } = options;
+
+  return DB.Questionnaire
+    .findOne({})
+    .then((Questionnaire) => {
+      const json = Questionnaire ? jsonQuestionnaire(Questionnaire) : null;
+
+      if (returnData) return { object: Questionnaire, json };
+      return res.status(Questionnaire ? 200 : 404).send(json);
+    })
+    .catch((error) => {
+      console.log(error);
+      return returnData ? error : res.status(400).send(error);
+    });
+}
+
 function jsonQuestionnaires(Questionnaires) {
   return Questionnaires
     .map(Questionnaire => jsonQuestionnaire(Questionnaire));
