@@ -1,4 +1,2 @@
 
-
-import DB from '../models';
-
+export function list ()

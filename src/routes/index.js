@@ -26,4 +26,7 @@ export default (app) => {
   app.patch('/tests/:id', C.Tests.update);
   app.put('/tests/:id', C.Tests.update);
   app.delete('/tests/:id', C.Tests.destroy);
+
+  /* Answer */
+  app.get('/answer', C.Answer.list);
 };
