@@ -20,10 +20,10 @@ export default (app) => {
 
   /* Questionnaires */
   app.get('/questionnaires', C.Questionnaires.list);
-  app.post('/my-questionnaires', C.Questionnaires.create);
-  app.get('/my-questionnaires', C.Questionnaires.find);
-  app.put('/my-questionnaires/:questionnaireId', C.Questionnaires.update);
-  app.delete('/my-questionnaires/:questionnaireId', C.Questionnaires.destroy);
+  app.post('/my-questionnaires', authBearer(), C.Questionnaires.create);
+  app.get('/my-questionnaires', authBearer(), C.Questionnaires.find);
+  app.put('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.update);
+  app.delete('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.destroy);
 
   /* Tests */
   app.get('/tests', C.Tests.list);
