@@ -5,6 +5,7 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    title: DataTypes.STRING,
     type: {
       type: DataTypes.ENUM('basic', 'premium', 'onetime-premium'),
       required: true,
