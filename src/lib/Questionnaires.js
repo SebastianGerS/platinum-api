@@ -64,6 +64,9 @@ export function create(options) {
       createdAt: new Date(),
       updatedAt: new Date(),
     })
+    .then((Questionnaire) => {
+      if (Questionnaire) { return res.status(200).send({ message: 'Successfully created a new questionnaire!' }); }
+    })
     .catch((error) => {
       console.log(error);
 
