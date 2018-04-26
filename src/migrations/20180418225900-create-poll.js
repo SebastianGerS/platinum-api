@@ -6,9 +6,8 @@ module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Polls', {
     id: {
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
     },
     userId: {
       type: Sequelize.INTEGER,
@@ -44,7 +43,6 @@ module.exports = {
     },
     duration: {
       type: Sequelize.INTEGER,
-      required: true,
     },
     createdAt: {
       allowNull: false,

@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars, no-sequences, no-unused-expressions,
-no-use-before-define, no-param-reassign, no-console, func-names */
+no-use-before-define, no-param-reassign, no-console, func-names, import/first */
+
 
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Polls', [
-    poll(1, 1, 'https://localhost:7771/polls/1', 'https://localhost:7771/polls/1', 'closed', 10, mockDateTime(20)),
-    poll(1, 1, 'https://localhost:7771/polls/2', 'https://localhost:7771/polls/2', 'closed', 60, mockDateTime(20)),
-    poll(2, 3, 'https://localhost:7771/polls/3', 'https://localhost:7771/polls/3', 'closed', 120, mockDateTime(20)),
-    poll(1, 2, 'https://localhost:7771/polls/4', 'https://localhost:7771/polls/4', 'closed', 5, mockDateTime(20)),
-    poll(3, 4, 'https://localhost:7771/polls/5', 'https://localhost:7771/polls/5', 'closed', 15, mockDateTime(20)),
-    poll(4, 5, 'https://localhost:7771/polls/6', 'https://localhost:7771/polls/6', 'closed', 240, mockDateTime(20)),
+    poll('1', 1, 1, 'http://localhost:7771/polls/1', 'http://localhost:7771/polls/1', 'closed', 10, mockDateTime(20)),
+    poll('2', 1, 1, 'http://localhost:7771/polls/2', 'http://localhost:7771/polls/2', 'closed', 60, mockDateTime(20)),
+    poll('3', 2, 3, 'http://localhost:7771/polls/3', 'http://localhost:7771/polls/3', 'closed', 120, mockDateTime(20)),
+    poll('4', 1, 2, 'http://localhost:7771/polls/4', 'http://localhost:7771/polls/4', 'closed', 5, mockDateTime(20)),
+    poll('5', 3, 4, 'http://localhost:7771/polls/5', 'http://localhost:7771/polls/5', 'closed', 15, mockDateTime(20)),
+    poll('6', 4, 5, 'http://localhost:7771/polls/6', 'http://localhost:7771/polls/6', 'closed', 240, mockDateTime(20)),
   ], {}),
 
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Polls', null, {}),
@@ -16,18 +17,18 @@ module.exports = {
 
 const Moment = require('moment');
 
-function poll(userId, questionnaireId, link, qrCode, status, duration, date) {
+function poll(id, userId, questionnaireId, link, qrCode, status, duration, date) {
   const newDate = new Date();
   const closedDate = new Date(date);
-  let maxVotes;
 
   const data = {
+    id,
     userId,
     questionnaireId,
     link,
     qrCode,
     status,
-    maxNumOfVotes: maxVotes,
+    maxNumOfVotes: null,
     duration,
     createdAt: newDate,
     updatedAt: newDate,
@@ -53,3 +54,4 @@ function rand(min = 0, max = 60) {
 
   return Math.floor(Math.random() * (max - min)) + min;
 }
+

@@ -26,4 +26,11 @@ export default (app) => {
   app.patch('/tests/:id', C.Tests.update);
   app.put('/tests/:id', C.Tests.update);
   app.delete('/tests/:id', C.Tests.destroy);
+
+  app.get('/polls', authBearer(), C.Polls.list);
+  app.get('/my-polls', authBearer(), C.Polls.find);
+  app.post('/my-polls', authBearer(), C.Polls.create);
+  app.put('/my-polls/:pollId', authBearer(), C.Polls.update);
+  app.delete('/my-polls/:pollId', authBearer(), C.Polls.destroy);
+  app.get('/polls/:pollId', C.Polls.findOne);
 };
