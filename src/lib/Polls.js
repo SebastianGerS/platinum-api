@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies,
- no-console, max-len */
+ no-console, consistent-return */
 
 import DB from '../models';
 import { pageCount } from '../helpers/Data';
@@ -138,13 +138,18 @@ export function create(options) {
           status: 'active',
           createdAt: new Date(),
           updatedAt: new Date(),
+        }).then((Poll) => {
+          const data = jsonPoll(Poll);
+          return res.status(200).send({
+            message: 'New Poll has been Activated!',
+            data,
+          });
         })
         .catch((error) => {
           console.log(error);
 
           return res.status(400).send(error);
         });
-      return res.status(200).send({ message: 'New Poll has been Activated!' });
     });
 }
 
@@ -192,7 +197,6 @@ export function destroy(options) {
     returnData: true,
   })
     .then((Poll) => {
-      console.log(Poll);
       if (Poll.json.userId !== userId) { return res.status(401).send({ message: 'You can\'t delete Polls that are not yours' }); }
       if (Poll.json.status === 'active') { return res.status(403).send({ message: 'You can\'t delete a active pole, please close it first' }); }
       DB.Poll
