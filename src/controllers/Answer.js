@@ -4,7 +4,12 @@ export default {
     list(req, res) {
       Promise
         .all([
-          
+          Answer.list({
+            res,
+            query: req.query,
+            returnData: true,
+            jsonData: true,
+          })
         ])
         .then((promises) => {
           res.status(200).send({
