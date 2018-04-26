@@ -30,15 +30,15 @@ export default {
 
     Questionnaires.create({
       res,
-      title: req.body.title,
+      body: req.body,
     });
   },
 
   find(req, res) {
     Questionnaires.find({
       res,
-      where: {
-        questionnaireId: req.params.questionnaireId,
+      query: {
+        userId: req.user.dataValues.userId,
       },
     });
   },

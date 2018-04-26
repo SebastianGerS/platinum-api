@@ -34,19 +34,40 @@ export function pages({ query }) {
 }
 
 export function find(options) {
-  const { res, returnData } = options;
+  const { res, returnData, query } = options;
 
   return DB.Questionnaire
-    .findOne({})
-    .then((Questionnaire) => {
-      const json = Questionnaire ? jsonQuestionnaire(Questionnaire) : null;
+    .findAll({ where: query })
+    .then((Questionnaires) => {
+      const json = Questionnaires ? jsonQuestionnaires(Questionnaires) : null;
 
-      if (returnData) return { object: Questionnaire, json };
-      return res.status(Questionnaire ? 200 : 404).send(json);
+      if (returnData) return { object: Questionnaires, json };
+      return res.status(Questionnaires ? 200 : 404).send(json);
     })
     .catch((error) => {
       console.log(error);
       return returnData ? error : res.status(400).send(error);
+    });
+}
+
+export function create(options) {
+  const { res, body } = options;
+  const {
+    title, type, userId,
+  } = body;
+
+  DB.Questionnaire
+    .create({
+      title,
+      type,
+      userId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .catch((error) => {
+      console.log(error);
+
+      return res.status(400).send(error);
     });
 }
 
