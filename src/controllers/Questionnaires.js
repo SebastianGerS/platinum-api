@@ -57,7 +57,10 @@ export default {
   destroy(req, res) {
     Questionnaires.destroy({
       res,
-      questionnaireId: req.params.questionnaireId,
+      userId: req.user.dataValues.userId,
+      query: {
+        id: req.params.questionnaireId,
+      },
     });
   },
 };
