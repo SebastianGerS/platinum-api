@@ -103,6 +103,32 @@ export function update(options) {
     });
 }
 
+export function destroy(options) {
+  const {
+    res, userId, query,
+  } = options;
+
+  find({
+    res,
+    query,
+    returnData: true,
+  })
+    .then((Questionnaire) => {
+      if (userId !== Questionnaire.object[0].userId) { return res.status(400).send({ message: 'You can not delete this questionnaire...' }); }
+
+      DB.Questionnaire
+        .destroy({ where: query })
+        .then((Questionnaire) => {
+          if (Questionnaire) { return res.status(200).send({ message: 'Successfully deleted a questionnaire!' }); }
+        })
+        .catch((error) => {
+          console.log(error);
+
+          return res.status(400).send(error);
+        });
+    });
+}
+
 function jsonQuestionnaires(Questionnaires) {
   return Questionnaires
     .map(Questionnaire => jsonQuestionnaire(Questionnaire));
