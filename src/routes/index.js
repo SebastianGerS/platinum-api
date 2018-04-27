@@ -19,7 +19,8 @@ export default (app) => {
   app.delete('/users/:userId', authBearer(), C.Users.destroy);
 
   /* Questionnaires */
-  app.get('/questionnaires', C.Questionnaires.list);
+  app.get('/questionnaires', authBearer(), C.Questionnaires.list);
+  app.get('/questionnaires/:questionnaireId', authBearer(), C.Questionnaires.findOne);
   app.post('/my-questionnaires', authBearer(), C.Questionnaires.create);
   app.get('/my-questionnaires', authBearer(), C.Questionnaires.find);
   app.put('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.update);
