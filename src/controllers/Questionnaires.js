@@ -44,6 +44,15 @@ export default {
     });
   },
 
+  findOne(req, res) {
+    Questionnaires.findOne({
+      res,
+      query: {
+        id: req.params.questionnaireId,
+      },
+    });
+  },
+
   update(req, res) {
     Questionnaires.update({
       res,
