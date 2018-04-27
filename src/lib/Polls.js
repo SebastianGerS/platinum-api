@@ -3,6 +3,7 @@
 
 import DB from '../models';
 import { pageCount } from '../helpers/Data';
+import * as Questionnaires from './Questionnaires';
 import uuidv4 from 'uuid/v4';
 
 function jsonPoll(Poll) {
@@ -84,11 +85,12 @@ export function findOne(options) {
       where,
     })
     .then((Poll) => {
-      const json = Poll ? jsonPoll(Poll) : null;
-
-      if (returnData) return { object: Poll, json };
-
-      return res.status(Poll ? 200 : 404).send(json);
+      Questionnaires.findOne({
+        res,
+        query: {
+          id: Poll.questionnaireId,
+        },
+      });
     })
     .catch((error) => {
       console.log(error);
