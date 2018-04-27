@@ -18,6 +18,13 @@ export default (app) => {
   app.put('/users/:userId', authBearer(), C.Users.update);
   app.delete('/users/:userId', authBearer(), C.Users.destroy);
 
+  /* Questionnaires */
+  app.get('/questionnaires', C.Questionnaires.list);
+  app.post('/my-questionnaires', authBearer(), C.Questionnaires.create);
+  app.get('/my-questionnaires', authBearer(), C.Questionnaires.find);
+  app.put('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.update);
+  app.delete('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.destroy);
+
   /* Tests */
   app.get('/tests', C.Tests.list);
   app.get('/tests/custom-method', C.Tests.customMethod); // Should be placed before other requests with dynamic values
@@ -27,6 +34,7 @@ export default (app) => {
   app.put('/tests/:id', C.Tests.update);
   app.delete('/tests/:id', C.Tests.destroy);
 
+  /* Polls */
   app.get('/polls', authBearer(), C.Polls.list);
   app.get('/my-polls', authBearer(), C.Polls.find);
   app.post('/my-polls', authBearer(), C.Polls.create);
