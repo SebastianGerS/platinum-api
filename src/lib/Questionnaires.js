@@ -51,9 +51,9 @@ export function find(options) {
 }
 
 export function create(options) {
-  const { res, body } = options;
+  const { res, userId, body } = options;
   const {
-    title, type, userId,
+    title, type,
   } = body;
 
   DB.Questionnaire

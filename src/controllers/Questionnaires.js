@@ -30,6 +30,7 @@ export default {
 
     Questionnaires.create({
       res,
+      userId: req.user.dataValues.userId,
       body: req.body,
     });
   },
