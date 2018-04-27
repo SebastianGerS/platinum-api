@@ -3,9 +3,9 @@
 
 import _ from 'lodash';
 import DB from '../models';
-import * as Paths from '../lib/Paths';
 import { filters, pageCount, orderBy } from '../helpers/Data';
 import { rand } from '../helpers/Math';
+import * as Questions from './Questions';
 
 export function list(options) {
   const {
@@ -43,6 +43,37 @@ export function find(options) {
 
       if (returnData) return { object: Questionnaires, json };
       return res.status(Questionnaires ? 200 : 404).send(json);
+    })
+    .catch((error) => {
+      console.log(error);
+      return returnData ? error : res.status(400).send(error);
+    });
+}
+
+export function findOne(options) {
+  const { res, returnData, query } = options;
+
+  return DB.Questionnaire
+    .findOne({
+      where: query,
+      include: [{
+        model: DB.Question,
+        as: 'Questions',
+        separate: true,
+        order: [['order', 'ASC']],
+        include: [{
+          model: DB.Option,
+          as: 'Options',
+          separate: true,
+          order: [['order', 'ASC']],
+        }],
+      }],
+    })
+    .then((Questionnaire) => {
+      const json = Questionnaire ? jsonQuestionnaire(Questionnaire) : null;
+
+      if (returnData) return { object: Questionnaire, json };
+      return res.status(Questionnaire ? 200 : 404).json(json);
     })
     .catch((error) => {
       console.log(error);
@@ -141,7 +172,7 @@ function jsonQuestionnaire(Questionnaire) {
     type: Questionnaire.type,
     userId: Questionnaire.userId,
     createdAt: Questionnaire.createdAt,
-    updatedAt: Questionnaire.updatedAt,
+    questions: Questions.jsonQuestions(Questionnaire.Questions),
   };
 }
 
