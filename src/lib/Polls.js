@@ -6,7 +6,7 @@ import { pageCount } from '../helpers/Data';
 import * as Questionnaires from './Questionnaires';
 import uuidv4 from 'uuid/v4';
 
-function jsonPoll(Poll) {
+export function jsonPoll(Poll) {
   return {
     id: Poll.id,
     userId: Poll.userId,
@@ -23,7 +23,7 @@ function jsonPoll(Poll) {
   };
 }
 
-function jsonPolls(Polls) {
+export function jsonPolls(Polls) {
   return Polls
     .map(Poll => jsonPoll(Poll));
 }
