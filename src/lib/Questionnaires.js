@@ -6,6 +6,7 @@ import DB from '../models';
 import { filters, pageCount, orderBy } from '../helpers/Data';
 import { rand } from '../helpers/Math';
 import * as Questions from './Questions';
+import * as Polls from './Polls';
 
 export function list(options) {
   const {
@@ -37,7 +38,15 @@ export function find(options) {
   const { res, returnData, query } = options;
 
   return DB.Questionnaire
-    .findAll({ where: query })
+    .findAll({
+      where: query,
+      include: [{
+        model: DB.Poll,
+        as: 'Polls',
+        where: { status: 'active' },
+        required: false,
+      }],
+    })
     .then((Questionnaires) => {
       const json = Questionnaires ? jsonQuestionnaires(Questionnaires) : null;
 
@@ -166,14 +175,22 @@ function jsonQuestionnaires(Questionnaires) {
 }
 
 function jsonQuestionnaire(Questionnaire) {
-  return {
+  const json = {
     id: Questionnaire.id,
     title: Questionnaire.title,
     type: Questionnaire.type,
     userId: Questionnaire.userId,
     createdAt: Questionnaire.createdAt,
-    questions: Questions.jsonQuestions(Questionnaire.Questions),
   };
+  if (Questionnaire.Questions) {
+    json.questions = Questions.jsonQuestions(Questionnaire.Questions);
+  }
+  if (Questionnaire.Polls) {
+    if (Questionnaire.Polls.status === 'acitve' || Questionnaire.Polls.status === undefined) {
+      json.activePoll = Polls.jsonPolls(Questionnaire.Polls);
+    }
+  }
+  return json;
 }
 
 /* eslint-enable import/no-extraneous-dependencies, no-use-before-define,
