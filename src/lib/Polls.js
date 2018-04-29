@@ -85,12 +85,23 @@ export function findOne(options) {
       where,
     })
     .then((Poll) => {
+      if (Poll.status === 'closed') return res.status(206).json({ poll: Poll });
       Questionnaires.findOne({
         res,
+        returnData: true,
         query: {
           id: Poll.questionnaireId,
         },
-      });
+      }).then(Questionnaire => res.status(200).json({
+        poll: {
+          id: Poll.id,
+          userId: Poll.userId,
+          link: Poll.link,
+          status: Poll.status,
+          maxNumOfVotes: Poll.maxNumOfVotes,
+          questionnaire: Questionnaire.json,
+        },
+      }));
     })
     .catch((error) => {
       console.log(error);
@@ -160,14 +171,15 @@ export function update(options) {
     res, userId, query,
   } = options;
 
-  findOne({
+  find({
     res,
-    where: query,
+    query,
     returnData: true,
+    jsonData: true,
   })
     .then((Poll) => {
-      if (Poll.json.userId !== userId) { return res.status(401).send({ message: 'You can\'t update Polls that are not yours' }); }
-      if (Poll.json.status !== 'active') { return res.status(403).send({ message: 'This poll is already closed' }); }
+      if (Poll[0].userId !== userId) { return res.status(401).send({ message: 'You can\'t update Polls that are not yours' }); }
+      if (Poll[0].status !== 'active') { return res.status(403).send({ message: 'This poll is already closed' }); }
 
       DB.Poll
         .update({
@@ -193,14 +205,15 @@ export function update(options) {
 
 export function destroy(options) {
   const { res, userId, query } = options;
-  findOne({
+  find({
     res,
-    where: query,
+    query,
     returnData: true,
+    jsonData: true,
   })
     .then((Poll) => {
-      if (Poll.json.userId !== userId) { return res.status(401).send({ message: 'You can\'t delete Polls that are not yours' }); }
-      if (Poll.json.status === 'active') { return res.status(403).send({ message: 'You can\'t delete a active pole, please close it first' }); }
+      if (Poll[0].userId !== userId) { return res.status(401).send({ message: 'You can\'t delete Polls that are not yours' }); }
+      if (Poll[0].status === 'active') { return res.status(403).send({ message: 'You can\'t delete a active pole, please close it first' }); }
       DB.Poll
         .destroy({ where: query })
         .then(() => res.status(200).send())
