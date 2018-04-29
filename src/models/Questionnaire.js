@@ -23,7 +23,7 @@ export default (sequelize, DataTypes) => {
     });
 
     Questionnaire.hasMany(models.Poll, {
-      as: 'Poll',
+      as: 'Polls',
       foreignKey: 'questionnaireId',
     });
 
