@@ -186,7 +186,7 @@ function jsonQuestionnaire(Questionnaire) {
     json.questions = Questions.jsonQuestions(Questionnaire.Questions);
   }
   if (Questionnaire.Polls) {
-    if (Questionnaire.Polls.status === 'acitve' || Questionnaire.Polls.status === undefined) {
+    if (Questionnaire.Polls.status === 'active') {
       json.activePoll = Polls.jsonPolls(Questionnaire.Polls);
     }
   }
