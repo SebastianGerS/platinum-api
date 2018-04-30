@@ -58,24 +58,33 @@ export function pages({ query }) {
     .then(count => pageCount(query, count));
 }
 
-export function find(options) {
-  const { res, where, returnData } = options;
+export function findOne(options) {
+  const { res, returnData, query } = options;
 
-  return DB.User
+  return DB.Answer
     .findOne({
-      where,
-      include: INCLUDE_PATHS,
+      where: query,
+      include: [{
+        model: DB.Answer,
+        as: 'Answers',
+        separate: true,
+        order: [['order', 'ASC']],
+        include: [{
+          model: DB.Option,
+          as: 'Options',
+          separate: true,
+          order: [['order', 'ASC']],
+        }],
+      }],
     })
-    .then((User) => {
-      const json = User ? jsonUser(User) : null;
+    .then((Answer) => {
+      const json = Answer ? jsonAnswer(Answer) : null;
 
-      if (returnData) return { object: User, json };
-
-      return res.status(User ? 200 : 404).send(json);
+      if (returnData) return { object: Answer, json };
+      return res.status(Answer ? 200 : 404).json(json);
     })
     .catch((error) => {
       console.log(error);
-
       return returnData ? error : res.status(400).send(error);
     });
 }

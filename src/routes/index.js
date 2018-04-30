@@ -20,6 +20,7 @@ export default (app) => {
 
   /* Answer */
   app.get('/answer', C.Answer.list);
+  //app.get('/answer/:pollId', C.Answer.findOne)
 
   /* Tests */
   app.get('/tests', C.Tests.list);
