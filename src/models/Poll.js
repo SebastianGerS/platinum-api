@@ -38,6 +38,11 @@ export default (sequelize, DataTypes) => {
       as: 'Result',
       foreignKey: 'id',
     });
+
+    Poll.hasMany(models.Vote, {
+      as: 'Votes',
+      foreignKey: 'pollId',
+    });
   };
 
   return Poll;
