@@ -4,7 +4,7 @@ no-use-before-define, no-param-reassign, no-console, func-names, import/first */
 
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Polls', [
-    poll('1', 1, 1, 'http://localhost:7771/polls/1', 'http://localhost:7771/polls/1', 'closed', 10, mockDateTime(20)),
+    poll('1', 1, 1, 'http://localhost:7771/polls/1', 'http://localhost:7771/polls/1', 'active', 10, mockDateTime(20)),
     poll('2', 1, 1, 'http://localhost:7771/polls/2', 'http://localhost:7771/polls/2', 'closed', 60, mockDateTime(20)),
     poll('3', 2, 3, 'http://localhost:7771/polls/3', 'http://localhost:7771/polls/3', 'closed', 120, mockDateTime(20)),
     poll('4', 1, 2, 'http://localhost:7771/polls/4', 'http://localhost:7771/polls/4', 'closed', 5, mockDateTime(20)),
