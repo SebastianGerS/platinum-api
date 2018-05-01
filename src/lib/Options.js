@@ -5,6 +5,7 @@ export function jsonOption(Option) {
     questionId: Option.questionId,
     name: Option.name,
     order: Option.order,
+    votes: Option.Votes.length,
   };
 }
 
