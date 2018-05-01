@@ -85,12 +85,12 @@ export function findOne(options) {
       where,
     })
     .then((Poll) => {
-      if (Poll.status === 'closed') return res.status(206).json({ poll: Poll });
       Questionnaires.findOne({
         res,
         returnData: true,
         query: {
           id: Poll.questionnaireId,
+          pollId: Poll.id,
         },
       }).then(Questionnaire => res.status(200).json({
         poll: {
