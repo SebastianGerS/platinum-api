@@ -24,7 +24,7 @@ export function list(options) {
 }
 /* List end */
 
-/* Find start */
+/* findOne start */
 export function findOne(options) {
   const { res, returnData, query } = options;
 
@@ -32,8 +32,8 @@ export function findOne(options) {
     .findOne({
       where: query,
       include: [{
-        model: DB.Answer,
-        as: 'Answers',
+        model: DB.Vote,
+        as: 'Votes',
         separate: true,
         order: [['order', 'ASC']],
         include: [{

@@ -7,5 +7,14 @@ export default {
       returnData: false,
       jsonData: true,
     })
-  }
+  },
+
+  findOne(req, res) {
+    Answer.findOne({
+      res,
+      query: {
+        id: req.params.id,
+      },
+    });
+  },
 }
