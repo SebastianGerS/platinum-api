@@ -13,7 +13,7 @@ export default {
     Answer.findOne({
       res,
       query: {
-        id: req.params.id,
+        pollId: req.params.pollId,
       },
     });
   },

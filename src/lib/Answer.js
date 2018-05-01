@@ -48,14 +48,16 @@ export function findOne(options) {
       const json = Answer ? jsonAnswer(Answer) : null;
 
       if (returnData) return { object: Answer, json };
+      
       return res.status(Answer ? 200 : 404).json(json);
     })
     .catch((error) => {
       console.log(error);
+      
       return returnData ? error : res.status(400).send(error);
     });
 }
-/* Find end */
+/* findOne end */
 
 function jsonAnswers(Answers) {
   return Answers
