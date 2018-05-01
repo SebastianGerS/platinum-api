@@ -1,9 +1,8 @@
 export default (sequelize, DataTypes) => {
   const Poll = sequelize.define('Poll', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       primaryKey: true,
-      autoIncrement: true,
     },
     link: {
       type: DataTypes.STRING,
@@ -38,6 +37,11 @@ export default (sequelize, DataTypes) => {
     Poll.hasMany(models.Answer, {
       as: 'Result',
       foreignKey: 'id',
+    });
+
+    Poll.hasMany(models.Vote, {
+      as: 'Votes',
+      foreignKey: 'pollId',
     });
   };
 

@@ -35,6 +35,10 @@ app.use(cors({
   methods: 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
 }));
 
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
+
 app.use(bodyParser.json());
 
 routes(app);

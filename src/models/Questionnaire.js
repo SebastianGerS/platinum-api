@@ -5,6 +5,7 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    title: DataTypes.STRING,
     type: {
       type: DataTypes.ENUM('basic', 'premium', 'onetime-premium'),
       required: true,
@@ -22,12 +23,12 @@ export default (sequelize, DataTypes) => {
     });
 
     Questionnaire.hasMany(models.Poll, {
-      as: 'Poll',
+      as: 'Polls',
       foreignKey: 'questionnaireId',
     });
 
     Questionnaire.hasMany(models.Question, {
-      as: 'Question',
+      as: 'Questions',
       foreignKey: 'questionnaireId',
     });
   };

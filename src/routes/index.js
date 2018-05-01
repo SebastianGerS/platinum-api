@@ -21,6 +21,14 @@ export default (app) => {
   /* Answer */
   app.get('/answer', C.Answer.list);
   app.get('/answer/:pollId', C.Answer.findOne);
+  
+  /* Questionnaires */
+  app.get('/questionnaires', authBearer(), C.Questionnaires.list);
+  app.get('/questionnaires/:questionnaireId', authBearer(), C.Questionnaires.findOne);
+  app.post('/my-questionnaires', authBearer(), C.Questionnaires.create);
+  app.get('/my-questionnaires', authBearer(), C.Questionnaires.find);
+  app.put('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.update);
+  app.delete('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.destroy);
 
   /* Tests */
   app.get('/tests', C.Tests.list);
@@ -31,4 +39,11 @@ export default (app) => {
   app.put('/tests/:id', C.Tests.update);
   app.delete('/tests/:id', C.Tests.destroy);
 
+  /* Polls */
+  app.get('/polls', authBearer(), C.Polls.list);
+  app.get('/my-polls', authBearer(), C.Polls.find);
+  app.post('/my-polls', authBearer(), C.Polls.create);
+  app.put('/my-polls/:pollId', authBearer(), C.Polls.update);
+  app.delete('/my-polls/:pollId', authBearer(), C.Polls.destroy);
+  app.get('/polls/:pollId', C.Polls.findOne);
 };

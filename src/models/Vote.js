@@ -6,6 +6,8 @@ export default (sequelize, DataTypes) => {
       autoIncrement: true,
     },
     questionId: DataTypes.INTEGER,
+    pollId: DataTypes.STRING,
+    answerId: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   });
@@ -20,9 +22,14 @@ export default (sequelize, DataTypes) => {
     Vote.belongsToMany(models.Option, {
       as: 'Options',
       through: 'OptionVote',
+      foreignKey: 'voteId',
     });
     Vote.belongsTo(models.Answer, {
       as: 'Answer',
+      foreignKey: 'id',
+    });
+    Vote.belongsTo(models.Poll, {
+      as: 'Poll',
       foreignKey: 'id',
     });
   };

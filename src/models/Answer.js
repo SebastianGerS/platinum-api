@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
 
     Answer.hasMany(models.Vote, {
       as: 'Votes',
-      foreignKey: 'id',
+      foreignKey: 'answerId',
 
     });
   };

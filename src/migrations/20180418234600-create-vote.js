@@ -19,7 +19,16 @@ module.exports = {
       onUpdate: 'cascade',
       onDelete: 'cascade',
     },
-    answer: {
+    pollId: {
+      type: Sequelize.STRING,
+      references: {
+        model: 'Polls',
+        key: 'id',
+      },
+      onUpdate: 'cascade',
+      onDelete: 'cascade',
+    },
+    answerId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Answers',
