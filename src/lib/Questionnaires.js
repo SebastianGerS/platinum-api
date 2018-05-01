@@ -61,10 +61,9 @@ export function find(options) {
 
 export function findOne(options) {
   const { res, returnData, query } = options;
-
   return DB.Questionnaire
     .findOne({
-      where: query,
+      where: { id: query.id },
       include: [{
         model: DB.Question,
         as: 'Questions',
@@ -75,6 +74,13 @@ export function findOne(options) {
           as: 'Options',
           separate: true,
           order: [['order', 'ASC']],
+          include: [{
+            model: DB.Vote,
+            as: 'Votes',
+            through: { attributes: [] },
+            where: { pollId: query.pollId },
+            required: false,
+          }],
         }],
       }],
     })
