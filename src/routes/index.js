@@ -21,7 +21,8 @@ export default (app) => {
   /* Answer */
   app.get('/answer', C.Answer.list);
   app.get('/answer/:pollId', C.Answer.findOne);
-  
+  app.post('/my-answer/', C.Answer.create);
+
   /* Questionnaires */
   app.get('/questionnaires', authBearer(), C.Questionnaires.list);
   app.get('/questionnaires/:questionnaireId', authBearer(), C.Questionnaires.findOne);

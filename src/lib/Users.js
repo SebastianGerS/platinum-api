@@ -58,33 +58,24 @@ export function pages({ query }) {
     .then(count => pageCount(query, count));
 }
 
-export function findOne(options) {
-  const { res, returnData, query } = options;
+export function find(options) {
+  const { res, where, returnData } = options;
 
-  return DB.Answer
+  return DB.User
     .findOne({
-      where: query,
-      include: [{
-        model: DB.Answer,
-        as: 'Answers',
-        separate: true,
-        order: [['order', 'ASC']],
-        include: [{
-          model: DB.Option,
-          as: 'Options',
-          separate: true,
-          order: [['order', 'ASC']],
-        }],
-      }],
+      where,
+      include: INCLUDE_PATHS,
     })
-    .then((Answer) => {
-      const json = Answer ? jsonAnswer(Answer) : null;
+    .then((User) => {
+      const json = User ? jsonUser(User) : null;
 
-      if (returnData) return { object: Answer, json };
-      return res.status(Answer ? 200 : 404).json(json);
+      if (returnData) return { object: User, json };
+
+      return res.status(User ? 200 : 404).send(json);
     })
     .catch((error) => {
       console.log(error);
+
       return returnData ? error : res.status(400).send(error);
     });
 }
@@ -120,8 +111,8 @@ export function create(options) {
           updatedAt: new Date(),
         })
         .then(User =>
-          // TODO: Create promises for paths creation and
-          // sending temporary password to the new user
+        // TODO: Create promises for paths creation and
+        // sending temporary password to the new user
 
           Paths.create({
             res,
@@ -228,4 +219,4 @@ function jsonUser(User) {
 }
 
 /* eslint-enable import/no-extraneous-dependencies, no-use-before-define,
- prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */
+  prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */

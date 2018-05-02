@@ -6,7 +6,7 @@ export default {
       res,
       returnData: false,
       jsonData: true,
-    })
+    });
   },
 
   findOne(req, res) {
@@ -17,4 +17,11 @@ export default {
       },
     });
   },
-}
+
+  create(req, res) {
+    Answer.create({
+      res,
+      body: req.body,
+    });
+  },
+};
