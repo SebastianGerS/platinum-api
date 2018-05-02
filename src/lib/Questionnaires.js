@@ -49,7 +49,6 @@ export function find(options) {
     })
     .then((Questionnaires) => {
       const json = Questionnaires ? jsonQuestionnaires(Questionnaires) : null;
-
       if (returnData) return { object: Questionnaires, json };
       return res.status(Questionnaires ? 200 : 404).send(json);
     })
@@ -192,10 +191,13 @@ function jsonQuestionnaire(Questionnaire) {
     json.questions = Questions.jsonQuestions(Questionnaire.Questions);
   }
   if (Questionnaire.Polls) {
-    if (Questionnaire.Polls.status === 'active') {
-      json.activePoll = Polls.jsonPolls(Questionnaire.Polls);
+    if (Questionnaire.Polls[0]) {
+      if (Questionnaire.Polls[0].dataValues.status === 'active') {
+        json.activePoll = Polls.jsonPoll(Questionnaire.Polls[0]);
+      }
     }
   }
+
   return json;
 }
 
