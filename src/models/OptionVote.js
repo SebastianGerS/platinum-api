@@ -18,5 +18,7 @@ export default (sequelize, DataTypes) => {
     });
   };
 
+  OptionVote.removeAttribute('id');
+
   return OptionVote;
 };
