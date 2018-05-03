@@ -9,4 +9,12 @@ export default {
       jsonData: true,
     });
   },
+
+  create(req, res) {
+    Vote.create({
+      res,
+      body: req.body,
+    });
+  },
+
 };

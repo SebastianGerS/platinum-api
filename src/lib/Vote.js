@@ -34,5 +34,33 @@ export function list(options) {
     });
 }
 
+export function create(options) {
+  const { res, body } = options;
+  const {
+    optionId, questionId,
+  } = body;
+
+  DB.Vote
+  .create({
+    questionId, 
+    Options: [{
+      optionId
+    }]   
+  }, {
+    include: [ 		{model: DB.Option, as: 'Options',through: {}},  ]
+  }).then((Vote) => {
+    const data = jsonVote(Vote);
+    return res.status(200).send({
+      message: 'something went right!',
+      data,
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+    return res.status(400).send(error);
+  });
+
+}
+
 // create function
 // från vote, skapa en plats i ledger table mellan Options och Vote

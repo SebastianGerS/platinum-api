@@ -45,4 +45,5 @@ export default (app) => {
 
   /* Vote */
   app.get('/vote', C.Vote.list);
+  app.post('/my-vote', C.Vote.create);
 };
