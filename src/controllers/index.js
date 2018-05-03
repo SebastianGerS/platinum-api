@@ -4,6 +4,8 @@ import Users from './Users';
 import Answer from './Answer';
 import Polls from './Polls';
 import Questionnaires from './Questionnaires';
+import Questions from './Questions';
+import Options from './Options';
 
 export default {
   Sessions,
@@ -12,4 +14,6 @@ export default {
   Answer,
   Polls,
   Questionnaires,
+  Questions,
+  Options,
 };

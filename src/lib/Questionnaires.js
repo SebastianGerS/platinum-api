@@ -98,7 +98,7 @@ export function findOne(options) {
 export function create(options) {
   const { res, userId, body } = options;
   const {
-    title, type,
+    title, type, question,
   } = body;
 
   DB.Questionnaire
@@ -110,8 +110,18 @@ export function create(options) {
       updatedAt: new Date(),
     })
     .then((Questionnaire) => {
-      if (Questionnaire) { return res.status(200).send({ message: 'Successfully created a new questionnaire!' }); }
-    })
+      if (!Questionnaire) { return res.status(400).send({ message: 'Questionnaire could not be created' }); }
+      if (!question) { return res.status(200).send({ message: 'Questionnaire created!' }); }
+
+      question.questionnaireId = Questionnaire.id;
+
+      Questions.create({
+        res,
+        userId,
+        body: question,
+        returnData: true,
+      });
+    }).then(Questionnaire => res.status(200).send({ message: 'Successfully created new questionnaire!' }))
     .catch((error) => {
       console.log(error);
 
