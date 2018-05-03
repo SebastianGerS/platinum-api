@@ -6,6 +6,7 @@ import Polls from './Polls';
 import Questionnaires from './Questionnaires';
 import Questions from './Questions';
 import Options from './Options';
+import Vote from './Vote';
 
 export default {
   Sessions,
@@ -16,4 +17,5 @@ export default {
   Questionnaires,
   Questions,
   Options,
+  Vote,
 };
