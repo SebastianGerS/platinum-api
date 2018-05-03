@@ -20,7 +20,7 @@ export default (app) => {
 
   /* Answer */
   app.get('/answer', C.Answer.list);
-  app.post('/my-answer/', C.Answer.create);
+  app.post('/my-answer', C.Answer.create);
 
   /* Questionnaires */
   app.get('/questionnaires', authBearer(), C.Questionnaires.list);
