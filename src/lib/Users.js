@@ -83,7 +83,7 @@ export function find(options) {
 export function create(options) {
   const { res, body } = options;
   const {
-    firstName, lastName, email, role, redirect, status, allowedPaths, excludedPaths,
+    firstName, lastName, email, password, role, redirect, status, allowedPaths, excludedPaths,
   } = body;
 
   find({
@@ -96,7 +96,10 @@ export function create(options) {
 
       const randomPwd = rand(111111, 999999);
       const salt = BCrypt.genSaltSync(10);
-      const password = BCrypt.hashSync(randomPwd.toString(), salt);
+
+      const newPassword =
+      password ? BCrypt.hashSync(password, salt)
+        : BCrypt.hashSync(randomPwd.toString(), salt);
 
       DB.User
         .create({
@@ -104,7 +107,7 @@ export function create(options) {
           lastName,
           email,
           role,
-          password,
+          password: newPassword,
           status,
           redirect,
           createdAt: new Date(),
