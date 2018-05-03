@@ -42,4 +42,7 @@ export default (app) => {
   app.put('/my-polls/:pollId', authBearer(), C.Polls.update);
   app.delete('/my-polls/:pollId', authBearer(), C.Polls.destroy);
   app.get('/polls/:pollId', C.Polls.findOne);
+
+  /* Vote */
+  app.get('/vote', C.Vote.list);
 };
