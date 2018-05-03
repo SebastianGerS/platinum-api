@@ -18,6 +18,10 @@ export default (app) => {
   app.put('/users/:userId', authBearer(), C.Users.update);
   app.delete('/users/:userId', authBearer(), C.Users.destroy);
 
+  /* Answer */
+  app.get('/answer', C.Answer.list);
+  app.post('/my-answer/', C.Answer.create);
+
   /* Questionnaires */
   app.get('/questionnaires', authBearer(), C.Questionnaires.list);
   app.get('/questionnaires/:questionnaireId', authBearer(), C.Questionnaires.findOne);

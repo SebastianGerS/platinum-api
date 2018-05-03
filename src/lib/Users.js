@@ -111,8 +111,8 @@ export function create(options) {
           updatedAt: new Date(),
         })
         .then(User =>
-          // TODO: Create promises for paths creation and
-          // sending temporary password to the new user
+        // TODO: Create promises for paths creation and
+        // sending temporary password to the new user
 
           Paths.create({
             res,
@@ -219,4 +219,4 @@ function jsonUser(User) {
 }
 
 /* eslint-enable import/no-extraneous-dependencies, no-use-before-define,
- prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */
+  prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */
