@@ -9,15 +9,6 @@ export default {
     });
   },
 
-  findOne(req, res) {
-    Answer.findOne({
-      res,
-      query: {
-        pollId: req.params.pollId,
-      },
-    });
-  },
-
   create(req, res) {
     Answer.create({
       res,
