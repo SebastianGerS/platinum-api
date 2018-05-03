@@ -2,7 +2,7 @@
 no-use-before-define, no-param-reassign, no-console, func-names */
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('OptionVote', [
+  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('OptionVotes', [
     optionVote(2, 1, mockDateTime(20)),
     optionVote(3, 2, mockDateTime(20)),
     optionVote(17, 3, mockDateTime(20)),
@@ -66,7 +66,7 @@ module.exports = {
     optionVote(11, 61, mockDateTime(20)),
   ], {}),
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('OptionVote', null, {}),
+  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('OptionVotes', null, {}),
 };
 
 const Moment = require('moment');

@@ -3,7 +3,7 @@
 'use strict',
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('OptionVote', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('OptionVotes', {
     optionId: {
       type: Sequelize.INTEGER,
       references: {
@@ -31,7 +31,7 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('OptionVote'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('OptionVotes'),
 };
 
 /* eslint-enable no-unused-vars, no-sequences, no-unused-expressions */

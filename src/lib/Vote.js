@@ -5,6 +5,9 @@ function jsonVote(Vote) {
   return {
     id: Vote.id,
     questionId: Vote.questionId,
+    pollId: Vote.pollId,
+    answerId: Vote.answerId,
+    options: Vote.options
   };
 }
 
@@ -37,22 +40,26 @@ export function list(options) {
 export function create(options) {
   const { res, body } = options;
   const {
-    optionId, questionId,
+    optionId, questionId, pollId, answerId
   } = body;
 
   DB.Vote
   .create({
-    questionId, 
-    Options: [{
-      optionId
-    }]   
-  }, {
-    include: [ 		{model: DB.Option, as: 'Options',through: {}},  ]
+    questionId,
+    pollId,
+    answerId,
   }).then((Vote) => {
-    const data = jsonVote(Vote);
-    return res.status(200).send({
-      message: 'something went right!',
-      data,
+
+      DB.OptionVote.create({  
+        optionId,
+        voteId: Vote.id,
+      }).then((OptionVote) => {
+        Vote.options = OptionVote;
+        const data = jsonVote(Vote);
+        return res.status(200).send({
+        message: 'something went right!',
+        data,
+      });
     });
   })
   .catch((error) => {

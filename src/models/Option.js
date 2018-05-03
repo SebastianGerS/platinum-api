@@ -28,7 +28,7 @@ export default (sequelize, DataTypes) => {
 
     Option.belongsToMany(models.Vote, {
       as: 'Votes',
-      through: 'OptionVote',
+      through: 'OptionVotes',
       foreignKey: 'optionId',
     });
   };
