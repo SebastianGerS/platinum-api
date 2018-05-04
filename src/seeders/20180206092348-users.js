@@ -16,7 +16,7 @@ module.exports = {
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Users', null, {}),
 };
 
-const BCrypt = require('bcrypt');
+const BCrypt = require('bcryptjs');
 const Moment = require('moment');
 
 function user(firstName, lastName, email, role, date, status = 'active') {
