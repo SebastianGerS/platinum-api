@@ -21,6 +21,22 @@ module.exports = {
     dialect: 'postgres',
     migrationStorageTableName: 'sequelize_meta',
   },
+  staging: {
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
+    host: process.env.POSTGRES_HOST,
+    dialect: 'postgres',
+    migrationStorageTableName: 'sequelize_meta',
+  },
+  production: {
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
+    host: process.env.POSTGRES_HOST,
+    dialect: 'postgres',
+    migrationStorageTableName: 'sequelize_meta',
+  },
 };
 
 /* eslint-ensable global-require, no-console, guard-for-in, no-restricted-syntax */

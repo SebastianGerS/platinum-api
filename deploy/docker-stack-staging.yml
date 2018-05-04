@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  api:
+    image: registry.chas.school/platinum-api-staging:latest
+    working_dir: /app
+    command: node dist/server.js
+    environment:
+      - POSTGRES_HOST=database
+    depends_on:
+      - database
+    env_file:
+      - .env.staging
+    networks:
+      - traefik
+      - backend
+    deploy:
+      labels:
+        traefik.port: '7770'
+        traefik.backend: 'platinum_staging'
+        traefik.docker.network: 'traefik'
+        traefik.frontend.rule: 'Host:platinum-api-staging.chas.school'
+  database:
+    image: 'postgres:9.6'
+    volumes:
+      - 'database:/var/lib/postgresql/data'
+    env_file:
+      - .env.staging
+    networks:
+      - backend
+    deploy:
+      labels:
+        traefik.enable: 'false'
+volumes:
+  database:
+
+networks:
+  traefik:
+    external: true
+  backend:
+    external: false
