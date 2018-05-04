@@ -1,38 +1,40 @@
-'use strict'
+/* eslint-disable no-unused-vars, no-sequences, no-unused-expressions,
+import/extensions, no-var, vars-on-top, block-scoped-var, no-redeclare  */
 
-import fs from 'fs'
-import path from 'path'
-import Sequelize from 'sequelize'
-import dbConfig from '../config/database.js'
+import fs from 'fs';
+import path from 'path';
+import Sequelize from 'sequelize';
+import dbConfig from '../config/database.js';
 
-var basename = path.basename(__filename)
-var env      = process.env.NODE_ENV || 'development'
-var config   = dbConfig[env]
-var db       = {}
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = dbConfig[env];
+const db = {};
 
 if (config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[config.use_env_variable])
+  var sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
-  var sequelize = new Sequelize(config.database, config.username, config.password, config)
+  var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 fs
   .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
-  })
-  .forEach(file => {
-    var model = sequelize['import'](path.join(__dirname, file))
-    db[model.name] = model
-  })
+  .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    const model = sequelize.import(path.join(__dirname, file));
+    db[model.name] = model;
+  });
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
-    db[modelName].associate(db)
+    db[modelName].associate(db);
   }
-})
+});
 
-db.sequelize = sequelize
-db.Sequelize = Sequelize
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
-module.exports = db
+module.exports = db;
+
+/* eslint-enable no-unused-vars, no-sequences, no-unused-expressions,
+import/extensions, no-var, vars-on-top, block-scoped-var, no-redeclare  */

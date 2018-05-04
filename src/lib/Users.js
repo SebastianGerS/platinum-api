@@ -1,23 +1,30 @@
-import _ from 'lodash'
-import BCrypt from 'bcrypt'
-import DB from '../models'
-import * as Paths from '../lib/Paths'
-import { filters, pageCount, orderBy } from '../helpers/Data'
-import { rand } from '../helpers/Math'
+/* eslint-disable import/no-extraneous-dependencies, no-use-before-define,
+ prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */
+
+import _ from 'lodash';
+import BCrypt from 'bcryptjs';
+import DB from '../models';
+import * as Paths from '../lib/Paths';
+import { filters, pageCount, orderBy } from '../helpers/Data';
+import { rand } from '../helpers/Math';
 
 const FILTER_OPTIONS = {
   userId: { type: 'integer' },
   dateFrom: { col: 'createdAt', type: 'minDate' },
-  dateTo: { col: 'createdAt', type: 'maxDate' }
-}
+  dateTo: { col: 'createdAt', type: 'maxDate' },
+};
 const INCLUDE_PATHS = [{
   model: DB.Path,
-  as: 'Paths'
-}]
+  as: 'Paths',
+}];
 
 export function list(options) {
-  const { res, query, returnData, jsonData } = options
-  const { filtered, sorted, limit, page } = query
+  const {
+    res, query, returnData, jsonData,
+  } = options;
+  const {
+    filtered, sorted, limit, page,
+  } = query;
 
   return DB.User
     .findAll({
@@ -26,70 +33,73 @@ export function list(options) {
       include: INCLUDE_PATHS,
       offset: (page - 1) * limit,
       limit,
-      order: orderBy(sorted, ['userId', 'asc'])
+      order: orderBy(sorted, ['userId', 'asc']),
     })
-    .then(Users => {
-      const data = jsonData ? jsonUsers(Users) : Users
+    .then((Users) => {
+      const data = jsonData ? jsonUsers(Users) : Users;
 
-      if (returnData) return data
+      if (returnData) return data;
 
-      return res.status(data ? 200 : 404).send(data)
+      return res.status(data ? 200 : 404).send(data);
     })
-    .catch(error => {
-      console.log(error)
+    .catch((error) => {
+      console.log(error);
 
-      return returnData ? error : res.status(400).send(error)
-    })
+      return returnData ? error : res.status(400).send(error);
+    });
 }
 
 export function pages({ query }) {
   return DB.User
     .count({
       col: 'userId',
-      where: filters(query.filtered, FILTER_OPTIONS)
+      where: filters(query.filtered, FILTER_OPTIONS),
     })
-    .then(count => {
-      return pageCount(query, count)
-    })
+    .then(count => pageCount(query, count));
 }
 
 export function find(options) {
-  const { res, where, returnData } = options
+  const { res, where, returnData } = options;
 
   return DB.User
-    .findOne({ where,
-      include: INCLUDE_PATHS
+    .findOne({
+      where,
+      include: INCLUDE_PATHS,
     })
-    .then(User => {
-      const json = User ? jsonUser(User) : null
+    .then((User) => {
+      const json = User ? jsonUser(User) : null;
 
-      if (returnData) return { object: User, json }
+      if (returnData) return { object: User, json };
 
-      return res.status(User ? 200 : 404).send(json)
+      return res.status(User ? 200 : 404).send(json);
     })
-    .catch(error => {
-      console.log(error)
+    .catch((error) => {
+      console.log(error);
 
-      return returnData ? error : res.status(400).send(error)
-    })
+      return returnData ? error : res.status(400).send(error);
+    });
 }
 
 export function create(options) {
-  const { res, body } = options
-  const { firstName, lastName, email, role, redirect, status, allowedPaths, excludedPaths } = body
+  const { res, body } = options;
+  const {
+    firstName, lastName, email, password, role, redirect, status, allowedPaths, excludedPaths,
+  } = body;
 
   find({
-      res,
-      where: { email },
-      returnData: true
-    })
-    .then(User => {
-      if (User.object)
-        return res.status(401).send({ message: 'Email already exists.'})
+    res,
+    where: { email },
+    returnData: true,
+  })
+    .then((User) => {
+      if (User.object) { return res.status(401).send({ message: 'Email already exists.' }); }
 
-      const randomPwd = rand(111111, 999999)
-      const salt = BCrypt.genSaltSync(10)
-      const password = BCrypt.hashSync(randomPwd.toString(), salt)
+      const randomPwd = rand(111111, 999999);
+      const salt = BCrypt.genSaltSync(10);
+
+      const newPassword =
+      password ? BCrypt.hashSync(password, salt)
+        : BCrypt.hashSync(randomPwd.toString(), salt);
 
       DB.User
         .create({
@@ -97,42 +107,42 @@ export function create(options) {
           lastName,
           email,
           role,
-          password,
+          password: newPassword,
           status,
           redirect,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         })
-        .then(User => {
-          // TODO: Create promises for paths creation and
-          // sending temporary password to the new user
+        .then(User =>
+        // TODO: Create promises for paths creation and
+        // sending temporary password to the new user
 
-          return Paths.create({
+          Paths.create({
             res,
             body,
-            userId: User.userId
-          })
-        })
-        .catch(error => {
-          console.log(error)
+            userId: User.userId,
+          }))
+        .catch((error) => {
+          console.log(error);
 
-          return res.status(400).send(error)
-        })
-    })
+          return res.status(400).send(error);
+        });
+    });
 }
 
 export function update(options) {
-  const { res, userId, body } = options
-  const { firstName, lastName, email, role, status, redirect, allowedPaths, excludedPaths } = body
+  const { res, userId, body } = options;
+  const {
+    firstName, lastName, email, role, status, redirect, allowedPaths, excludedPaths,
+  } = body;
 
   find({
-      res,
-      where: { email },
-      returnData: true
-    })
-    .then(User => {
-      if (User.object !== null && User.object.userId !== parseInt(userId))
-        return res.status(401).send({ message: 'Email already exists.'})
+    res,
+    where: { email },
+    returnData: true,
+  })
+    .then((User) => {
+      if (User.object !== null && User.object.userId !== parseInt(userId)) { return res.status(401).send({ message: 'Email already exists.' }); }
 
       DB.User
         .update({
@@ -142,66 +152,60 @@ export function update(options) {
           role,
           status,
           redirect,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         }, {
-          where: { userId }
+          where: { userId },
         })
-        .then(User => {
-          return Paths.update({
-            res,
-            body,
-            userId
-          })
-        })
-        .catch(error => {
-          console.log(error)
+        .then(User => Paths.update({
+          res,
+          body,
+          userId,
+        }))
+        .catch((error) => {
+          console.log(error);
 
-          return res.status(400).send(error)
-        })
+          return res.status(400).send(error);
+        });
     })
-    .catch(error => {
-      console.log(error)
+    .catch((error) => {
+      console.log(error);
 
-      return res.status(400).send(error)
-    })
+      return res.status(400).send(error);
+    });
 }
 
 export function destroy(options) {
-  const { res, userId } = options
+  const { res, userId } = options;
 
   find({
-      res,
-      where: { userId },
-      returnData: true
-    })
-    .then(User => {
+    res,
+    where: { userId },
+    returnData: true,
+  })
+    .then((User) => {
       DB.User
         .destroy({ where: { userId } })
-        .then(() => {
-          return res.status(200).send()
-        })
-        .catch(error => {
-          console.log(error)
+        .then(() => res.status(200).send())
+        .catch((error) => {
+          console.log(error);
 
-          return res.status(400).send(error)
-        })
+          return res.status(400).send(error);
+        });
     })
-    .catch(error => {
-      console.log(error)
+    .catch((error) => {
+      console.log(error);
 
-      return res.status(400).send(error)
-    })
+      return res.status(400).send(error);
+    });
 }
 
 function jsonUsers(Users) {
   return Users
-    .map(User => {
-      return jsonUser(User)
-    })
+    .map(User => jsonUser(User));
 }
 
 function jsonUser(User) {
-  const { allowedPaths, excludedPaths } = User.Paths.value
+  const { allowedPaths, excludedPaths } = User.Paths.value;
 
   return {
     userId: User.userId,
@@ -213,6 +217,9 @@ function jsonUser(User) {
     redirect: User.redirect,
     createdAt: User.createdAt,
     allowedPaths,
-    excludedPaths
-  }
+    excludedPaths,
+  };
 }
+
+/* eslint-enable import/no-extraneous-dependencies, no-use-before-define,
+  prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */
