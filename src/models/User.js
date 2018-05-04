@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-sequences, func-names */
 
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {

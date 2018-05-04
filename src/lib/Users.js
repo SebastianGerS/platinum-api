@@ -2,7 +2,7 @@
  prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */
 
 import _ from 'lodash';
-import BCrypt from 'bcrypt';
+import BCrypt from 'bcryptjs';
 import DB from '../models';
 import * as Paths from '../lib/Paths';
 import { filters, pageCount, orderBy } from '../helpers/Data';
