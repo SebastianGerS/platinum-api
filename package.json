@@ -51,7 +51,8 @@
     "flow status": "flow status",
     "flow coverage": "flow coverage",
     "precommit": "lint-staged",
-    "pretty": "eslint --fix"
+    "pretty": "eslint --fix",
+    "build": "babel src -d dist"
   },
   "lint-staged": {
     "*.js": [
