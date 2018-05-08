@@ -80,7 +80,7 @@ export function find(options) {
 export function findOne(options) {
   const { res, where, returnData } = options;
 
-  return DB.Poll
+  return new Promise(resolve => DB.Poll
     .findOne({
       where,
     })
@@ -92,22 +92,29 @@ export function findOne(options) {
           id: Poll.questionnaireId,
           pollId: Poll.id,
         },
-      }).then(Questionnaire => res.status(200).json({
-        poll: {
-          id: Poll.id,
-          userId: Poll.userId,
-          link: Poll.link,
-          status: Poll.status,
-          maxNumOfVotes: Poll.maxNumOfVotes,
-          questionnaire: Questionnaire.json,
-        },
-      }));
+      }).then((Questionnaire) => {
+        const data = {
+          poll: {
+            id: Poll.id,
+            userId: Poll.userId,
+            link: Poll.link,
+            status: Poll.status,
+            maxNumOfVotes: Poll.maxNumOfVotes,
+            questionnaire: Questionnaire.json,
+          },
+        };
+        if (returnData) {
+          resolve(data.poll);
+        }
+        return res.status(200).json(data);
+      });
     })
     .catch((error) => {
       console.log(error);
 
+
       return returnData ? error : res.status(400).send(error);
-    });
+    }));
 }
 
 export function create(options) {
