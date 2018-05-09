@@ -106,7 +106,9 @@ export function findOne(options) {
         if (returnData) {
           resolve(data.poll);
         }
-        return res.status(200).json(data);
+        if (res) {
+          return res.status(200).json(data);
+        }
       });
     })
     .catch((error) => {
