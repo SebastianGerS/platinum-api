@@ -33,8 +33,9 @@ export default (app) => {
   /* Questions */
 
   app.post('/questions', authBearer(), C.Questions.create);
+  app.put('/questions/:questionId', authBearer(), C.Questions.update);
   app.delete('/questions/:questionId', authBearer(), C.Questions.destroy);
-  app.put('/my-questionnaires/:questionnaireId/questions/:questionId', authBearer(), C.Questions.update);
+
   /* Options */
 
   app.post('/options', authBearer(), C.Options.create);
