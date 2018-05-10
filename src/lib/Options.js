@@ -56,3 +56,56 @@ export function create(data) {
       return res.status(400).send(error);
     });
 }
+export async function update(data) {
+  const {
+    res,
+    userId,
+    questionId,
+    questionnaireId,
+    options,
+    returnData,
+  } = data;
+
+  return new Promise((resolve) => {
+    Promise.all(options.map(async (option) => {
+      await DB.Option.findOne({ where: { id: option.id } })
+        .then(async (Option) => {
+          if (Option) {
+            if (Option.questionId !== questionId) { return res.status(400).send({ message: 'You can\'t updated options that does not belong to this question' }); }
+            await Promise.all([
+              DB.Option.update({
+                name: option.name,
+                updatedAt: new Date(),
+              }, {
+                where: { id: option.id },
+              })
+                .catch((error) => {
+                  console.log(error);
+                }),
+            ]).catch((error) => {
+              console.log(error);
+            });
+          } else {
+            await Promise.all([
+              create({
+                res,
+                userId,
+                questionId,
+                questionnaireId,
+                options: [option],
+                returnData,
+              }),
+            ]).catch((error) => {
+              console.log(error);
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })).then(() => resolve(options));
+  })
+    .catch((error) => {
+      console.log(error);
+    });
+}

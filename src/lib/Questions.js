@@ -88,12 +88,12 @@ export function create(data) {
     });
 }
 
-export function update(options) {
+export function update(data) {
   const {
     res, userId, body, questionId,
-  } = options;
+  } = data;
 
-  const { name } = body;
+  const { name, options } = body;
 
   find({
     res,
@@ -120,7 +120,23 @@ export function update(options) {
         }, {
           where: { id: questionId },
         })
-          .then(() => res.status(200).send({ message: 'Successfully updated the name of the question' }))
+          .then(() => {
+            if (options) {
+              return new Promise(resolve =>
+                Options.update({
+                  res,
+                  userId,
+                  questionId,
+                  questionnaireId: Questionnaire.object[0].id,
+                  options,
+                  returnData: true,
+                })
+                  .then(() => resolve(res.status(200).send({ message: 'Successfully updated the question' })))
+                  .catch((error) => {
+                    console.log(error);
+                  }));
+            }
+          })
           .catch((error) => {
             console.log(error);
 

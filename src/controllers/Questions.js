@@ -15,7 +15,7 @@ export default {
       res,
       body: req.body,
       userId: req.user.dataValues.userId,
-      questionId: req.params.questionId,
+      questionId: +req.params.questionId,
     });
   },
   destroy(req, res) {
