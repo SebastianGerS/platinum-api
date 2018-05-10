@@ -1,20 +1,42 @@
 import * as DB from '../models';
 import * as Options from './Options';
+import * as Questionnaires from './Questionnaires';
 /* eslint-disable consistent-return, no-console */
 export function jsonQuestion(Question) {
-  return {
+  const question = {
     id: Question.id,
     questionnaireId: Question.questionnaireId,
     name: Question.name,
     type: Question.type,
     order: Question.order,
-    options: Options.jsonOptions(Question.Options),
   };
+
+  if (Question.Options) {
+    question.options = Options.jsonOptions(Question.Options);
+  }
+  return question;
 }
 
 export function jsonQuestions(Questions) {
   return Questions
     .map(Question => jsonQuestion(Question));
+}
+export function find(options) {
+  const { res, returnData, query } = options;
+  return DB.Question
+    .findOne({
+      where: query,
+    })
+    .then((Question) => {
+      const json = Question ? jsonQuestion(Question) : null;
+
+      if (returnData) return json;
+      return res.status(Question ? 200 : 404).json(json);
+    })
+    .catch((error) => {
+      console.log(error);
+      return returnData ? error : res.status(400).send(error);
+    });
 }
 
 export function create(data) {
@@ -64,4 +86,42 @@ export function create(data) {
 
       return res.status(400).send(error);
     });
+}
+
+
+export function destroy(options) {
+  const {
+    res, userId, questionId,
+  } = options;
+  find({
+    res,
+    returnData: true,
+    query: {
+      id: questionId,
+    },
+  }).then((Question) => {
+    if (!Question) { return res.status(404).send({ message: 'The question you are trying to delete does not exist' }); }
+    Questionnaires.find({
+      res,
+      query: {
+        id: Question.questionnaireId,
+      },
+      returnData: true,
+    })
+      .then((Questionnaire) => {
+        console.log(Questionnaire);
+        if (userId !== Questionnaire.object[0].userId) { return res.status(400).send({ message: 'You can not delete this questions that are not yours' }); }
+
+        DB.Question
+          .destroy({ where: { id: questionId } })
+          .then((DeletedQuestion) => {
+            if (DeletedQuestion) { return res.status(200).send({ message: 'Successfully deleted a question!' }); }
+          })
+          .catch((error) => {
+            console.log(error);
+
+            return res.status(400).send(error);
+          });
+      });
+  });
 }

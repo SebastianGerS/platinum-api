@@ -10,4 +10,11 @@ export default {
       returnData: false,
     });
   },
+  destroy(req, res) {
+    Questions.destroy({
+      res,
+      userId: req.user.dataValues.userId,
+      questionId: req.params.questionId,
+    });
+  },
 };

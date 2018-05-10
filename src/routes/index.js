@@ -33,7 +33,7 @@ export default (app) => {
   /* Questions */
 
   app.post('/questions', authBearer(), C.Questions.create);
-
+  app.delete('/questions/:questionId', authBearer(), C.Questions.destroy);
   /* Options */
 
   app.post('/options', authBearer(), C.Options.create);
