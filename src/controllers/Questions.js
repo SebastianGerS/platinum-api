@@ -14,6 +14,14 @@ export default {
     Questions.destroy({
       res,
       userId: req.user.dataValues.userId,
+    });
+  },
+  update(req, res) {
+    Questions.update({
+      res,
+      body: req.body,
+      userId: req.user.dataValues.userId,
+      questionnaireId: req.params.questionnaireId,
       questionId: req.params.questionId,
     });
   },

@@ -88,6 +88,36 @@ export function create(data) {
     });
 }
 
+export function update(options) {
+  const {
+    res, userId, body, questionnaireId, questionId,
+  } = options;
+  const { name } = body;
+
+  Questionnaires.find({
+    res,
+    query: {
+      id: questionnaireId,
+    },
+    returnData: true,
+  })
+    .then((Questionnaire) => {
+      if (userId !== Questionnaire.object[0].userId) { return res.status(400).send({ message: 'You can not update questions that some one else has created' }); }
+
+      DB.Question.update({
+        name,
+        updatedAt: new Date(),
+      }, {
+        where: { id: questionId },
+      })
+        .then(() => res.status(200).send({ message: 'Successfully updated the name of the question' }))
+        .catch((error) => {
+          console.log(error);
+
+          return res.status(400).send(error);
+        });
+    });
+}
 
 export function destroy(options) {
   const {
@@ -125,3 +155,4 @@ export function destroy(options) {
       });
   });
 }
+
