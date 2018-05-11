@@ -39,7 +39,7 @@ export default (app) => {
   /* Options */
 
   app.post('/options', authBearer(), C.Options.create);
-  app.delete('/options/:optionId', authBearer(), C.Options.destroy);
+  app.delete('/questions/:questionId/options/:optionId', authBearer(), C.Options.destroy);
 
   /* Tests */
   app.get('/tests', C.Tests.list);

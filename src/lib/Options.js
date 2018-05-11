@@ -124,7 +124,7 @@ export function destroy(options) {
       id: questionId,
     },
   }).then((Question) => {
-    if (!Question) { return res.status(404).send({ message: 'The option you are trying to delete does not exist' }); }
+    if (!Question) { return res.status(404).send({ message: 'The Question attached to you option does not exist' }); }
     Questionnaires.find({
       res,
       query: {
@@ -133,13 +133,14 @@ export function destroy(options) {
       returnData: true,
     })
       .then((Questionnaire) => {
-        console.log(Questionnaire);
         if (userId !== Questionnaire.object[0].userId) { return res.status(400).send({ message: 'You can not delete options that are not yours' }); }
 
         DB.Option
           .destroy({ where: { id: optionId } })
           .then((DeletedOption) => {
-            if (DeletedOption) { return res.status(200).send({ message: 'Successfully deleted a option!' }); }
+            if (!DeletedOption) { return res.status(404).send({ message: 'The option you are trying to delete does not exist' }); }
+
+            return res.status(200).send({ message: 'Successfully deleted a option!' });
           })
           .catch((error) => {
             console.log(error);

@@ -17,7 +17,7 @@ export default {
       res,
       userId: +req.user.dataValues.userId,
       optionId: req.params.optionId,
-      questionId: req.body.questionId,
+      questionId: req.params.questionId,
     });
   },
 };
