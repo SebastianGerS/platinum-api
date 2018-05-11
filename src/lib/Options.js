@@ -1,5 +1,7 @@
 
 import * as DB from '../models';
+import * as Questions from './Questions';
+import * as Questionnaires from './Questionnaires';
 
 /* eslint-disable consistent-return, no-console */
 
@@ -75,6 +77,7 @@ export async function update(data) {
             await Promise.all([
               DB.Option.update({
                 name: option.name,
+                order: option.order,
                 updatedAt: new Date(),
               }, {
                 where: { id: option.id },
@@ -108,4 +111,41 @@ export async function update(data) {
     .catch((error) => {
       console.log(error);
     });
+}
+
+export function destroy(options) {
+  const {
+    res, userId, optionId, questionId,
+  } = options;
+  Questions.find({
+    res,
+    returnData: true,
+    query: {
+      id: questionId,
+    },
+  }).then((Question) => {
+    if (!Question) { return res.status(404).send({ message: 'The option you are trying to delete does not exist' }); }
+    Questionnaires.find({
+      res,
+      query: {
+        id: Question.questionnaireId,
+      },
+      returnData: true,
+    })
+      .then((Questionnaire) => {
+        console.log(Questionnaire);
+        if (userId !== Questionnaire.object[0].userId) { return res.status(400).send({ message: 'You can not delete options that are not yours' }); }
+
+        DB.Option
+          .destroy({ where: { id: optionId } })
+          .then((DeletedOption) => {
+            if (DeletedOption) { return res.status(200).send({ message: 'Successfully deleted a option!' }); }
+          })
+          .catch((error) => {
+            console.log(error);
+
+            return res.status(400).send(error);
+          });
+      });
+  });
 }
