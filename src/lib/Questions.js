@@ -166,7 +166,6 @@ export function destroy(options) {
       returnData: true,
     })
       .then((Questionnaire) => {
-        console.log(Questionnaire);
         if (userId !== Questionnaire.object[0].userId) { return res.status(400).send({ message: 'You can not delete this questions that are not yours' }); }
 
         DB.Question
