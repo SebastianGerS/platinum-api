@@ -73,6 +73,7 @@ export function find(options) {
         model: DB.Questionnaire,
         as: 'Questionnaire',
       }],
+      order: [[['closedAt', 'DESC']]],
     })
     .then((Polls) => {
       const data = jsonData ? jsonPolls(Polls) : Polls;
