@@ -21,9 +21,9 @@ export function jsonPoll(Poll) {
     closedAt: Poll.closedAt,
   };
 
-  // if (Poll.Questionnaire) {
-  //   newPoll.questionnaire = Poll.Questionnaire;
-  // }
+  if (Poll.Questionnaire) {
+    newPoll.questionnaire = Questionnaires.jsonQuestionnaire(Poll.Questionnaire);
+  }
 
   return newPoll;
 }
@@ -69,6 +69,10 @@ export function find(options) {
   return DB.Poll
     .findAll({
       where: query,
+      include: [{
+        model: DB.Questionnaire,
+        as: 'Questionnaire',
+      }],
     })
     .then((Polls) => {
       const data = jsonData ? jsonPolls(Polls) : Polls;
