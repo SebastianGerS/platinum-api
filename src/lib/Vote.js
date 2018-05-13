@@ -40,7 +40,7 @@ export function list(options) {
 export function create(options) {
   const { res, body } = options;
   const {
-    optionId, questionId, pollId, answerId
+    optionIds, questionId, pollId, answerId
   } = body;
 
   DB.Vote
@@ -49,11 +49,17 @@ export function create(options) {
     pollId,
     answerId,
   }).then((Vote) => {
-
-      DB.OptionVote.create({  
+    const newOptions = optionIds.map(optionId => {
+      const newOption = {
         optionId,
         voteId: Vote.id,
-      }).then((OptionVote) => {
+      }
+
+      return newOption;
+    })
+      DB.OptionVote
+      .bulkCreate(newOptions)
+      .then((OptionVote) => {
         Vote.options = OptionVote;
         const data = jsonVote(Vote);
         return res.status(200).send({
@@ -68,6 +74,3 @@ export function create(options) {
   });
 
 }
-
-// create function
-// från vote, skapa en plats i ledger table mellan Options och Vote
