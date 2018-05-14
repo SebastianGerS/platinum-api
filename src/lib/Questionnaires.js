@@ -40,6 +40,7 @@ export function find(options) {
   return DB.Questionnaire
     .findAll({
       where: query,
+      order: [['createdAt', 'DESC']],
       include: [{
         model: DB.Poll,
         as: 'Polls',
