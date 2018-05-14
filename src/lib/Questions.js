@@ -93,7 +93,7 @@ export function update(data) {
     res, userId, body, questionId,
   } = data;
 
-  const { name, options } = body;
+  const { name, type, options } = body;
 
   find({
     res,
@@ -116,6 +116,7 @@ export function update(data) {
 
         DB.Question.update({
           name,
+          type,
           updatedAt: new Date(),
         }, {
           where: { id: questionId },

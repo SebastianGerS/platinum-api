@@ -15,7 +15,7 @@ module.exports = {
       required: true,
     },
     type: {
-      type: Sequelize.ENUM('select-one', 'multiselect', 'short-text'),
+      type: Sequelize.ENUM('select-one', 'multi-select', 'short-text'),
     },
     order: {
       type: Sequelize.INTEGER,
