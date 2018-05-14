@@ -177,12 +177,12 @@ export function destroy(options) {
     });
 }
 
-function jsonQuestionnaires(Questionnaires) {
+export function jsonQuestionnaires(Questionnaires) {
   return Questionnaires
     .map(Questionnaire => jsonQuestionnaire(Questionnaire));
 }
 
-function jsonQuestionnaire(Questionnaire) {
+export function jsonQuestionnaire(Questionnaire) {
   const json = {
     id: Questionnaire.id,
     title: Questionnaire.title,

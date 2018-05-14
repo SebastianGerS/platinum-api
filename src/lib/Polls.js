@@ -7,7 +7,7 @@ import * as Questionnaires from './Questionnaires';
 import uuidv4 from 'uuid/v4';
 
 export function jsonPoll(Poll) {
-  return {
+  const newPoll = {
     id: Poll.id,
     userId: Poll.userId,
     questionnaireId: Poll.questionnaireId,
@@ -19,8 +19,13 @@ export function jsonPoll(Poll) {
     createdAt: Poll.createdAt,
     updatedAt: Poll.updatedAt,
     closedAt: Poll.closedAt,
-
   };
+
+  if (Poll.Questionnaire) {
+    newPoll.questionnaire = Questionnaires.jsonQuestionnaire(Poll.Questionnaire);
+  }
+
+  return newPoll;
 }
 
 export function jsonPolls(Polls) {
@@ -62,7 +67,14 @@ export function find(options) {
     res, query, returnData, jsonData,
   } = options;
   return DB.Poll
-    .findAll({ where: query })
+    .findAll({
+      where: query,
+      include: [{
+        model: DB.Questionnaire,
+        as: 'Questionnaire',
+      }],
+      order: [[['closedAt', 'DESC']]],
+    })
     .then((Polls) => {
       const data = jsonData ? jsonPolls(Polls) : Polls;
 
