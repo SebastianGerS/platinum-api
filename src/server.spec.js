@@ -20,39 +20,19 @@ import JWT from 'jsonwebtoken';
 
 // /* Answer */
 // app.get('/answer', C.Answer.list);
-// app.post('/my-answer', C.Answer.create);
 // /* Questionnaires */
 // app.get('/questionnaires', authBearer(), C.Questionnaires.list);
-// app.get('/questionnaires/:questionnaireId', authBearer(), C.Questionnaires.findOne);
-// app.get('/my-questionnaires', authBearer(), C.Questionnaires.find);
-// app.put('/my-questionnaires/:questionnaireId', authBearer(), C.Questionnaires.update);
-
-// /* Questions */
-
-// app.post('/questions', authBearer(), C.Questions.create);
-// app.put('/questions/:questionId', authBearer(), C.Questions.update);
-// app.delete('/questions/:questionId', authBearer(), C.Questions.destroy);
 
 // /* Options */
 
 // app.post('/options', authBearer(), C.Options.create);
-// app.delete('/questions/:questionId/options/:optionId', authBearer(), C.Options.destroy);
-
-// /* Tests */
-// app.get('/tests', C.Tests.list);
-// app.get('/tests/custom-method', C.Tests.customMethod);
-// app.post('/tests', C.Tests.create);
-// app.get('/tests/:id', C.Tests.find);
-// app.patch('/tests/:id', C.Tests.update);
-// app.put('/tests/:id', C.Tests.update);
-// app.delete('/tests/:id', C.Tests.destroy);
 
 // /* Polls */
 // app.get('/polls', authBearer(), C.Polls.list);
-// app.get('/my-polls', authBearer(), C.Polls.find);
-// app.put('/my-polls/:pollId', authBearer(), C.Polls.update);
-// app.delete('/my-polls/:pollId', authBearer(), C.Polls.destroy);
-// app.get('/polls/:pollId', C.Polls.findOne);
+
+// above paths remain untestet
+/* note that all existing test are basic they do not
+at this time asert the values of the data being returned */
 
 const should = chai.should();
 
@@ -127,6 +107,22 @@ describe('Routes', () => {
     });
   });
 
+  describe('PUT /my-questionnaires/:questionnaireId', () => {
+    it('It should update one questionnaire', (done) => {
+      chai.request('http://localhost:7770')
+        .put(`/my-questionnaires/${questionnaireId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'edited',
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
   describe('GET /questionnaires/:questionnaireId', () => {
     it('It should get one questionnaire', (done) => {
       chai.request('http://localhost:7770')
@@ -135,6 +131,19 @@ describe('Routes', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('GET /my-questionnaires', () => {
+    it('It should get all user questionnaires', (done) => {
+      chai.request('http://localhost:7770')
+        .get('/my-questionnaires')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('array');
           done();
         });
     });
@@ -158,6 +167,22 @@ describe('Routes', () => {
     });
   });
 
+  describe('PUT /questions/:questionId', () => {
+    it('It should update one question', (done) => {
+      chai.request('http://localhost:7770')
+        .put(`/questions/${questionId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'edited', type: 'multi-select', options: [{ id: optionId, name: 'meaby', order: 3 }, { name: 'yes', order: 1 }],
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
   describe('POST /my-polls', () => {
     it('It should create a poll', (done) => {
       chai.request('http://localhost:7770')
@@ -172,6 +197,7 @@ describe('Routes', () => {
         });
     });
   });
+
   describe('GET /polls/:pollId', () => {
     it('It should get a poll', (done) => {
       chai.request('http://localhost:7770')
@@ -183,6 +209,7 @@ describe('Routes', () => {
         });
     });
   });
+
   describe('POST /my-answer', () => {
     it('It should create a poll', (done) => {
       chai.request('http://localhost:7770')
@@ -197,6 +224,7 @@ describe('Routes', () => {
         });
     });
   });
+
   describe('POST /my-vote', () => {
     it('It should create a vote', (done) => {
       chai.request('http://localhost:7770') // get this to work with server
@@ -214,6 +242,71 @@ describe('Routes', () => {
         });
     });
   });
+
+  describe('PUT /my-polls/:pollId', () => {
+    it('It should close a poll', (done) => {
+      chai.request('http://localhost:7770')
+        .put(`/my-polls/${pollId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('GET /my-polls', () => {
+    it('It should get all closed polls that bellongs to the user', (done) => {
+      chai.request('http://localhost:7770')
+        .get('/my-polls')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /my-polls/:pollId', () => {
+    it('It should delete one poll', (done) => {
+      chai.request('http://localhost:7770')
+        .delete(`/my-polls/${pollId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /questions/:questionId/options/:optionId', () => {
+    it('It should delete one option', (done) => {
+      chai.request('http://localhost:7770')
+        .delete(`/questions/${questionId}/options/${optionId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /questions/:questionId', () => {
+    it('It should delete one question', (done) => {
+      chai.request('http://localhost:7770')
+        .delete(`/questions/${questionId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
   describe('DELETE /my-questionnaires', () => {
     it('It should delete one questionnaire', (done) => {
       chai.request('http://localhost:7770')
