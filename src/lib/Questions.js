@@ -1,7 +1,7 @@
 import * as DB from '../models';
 import * as Options from './Options';
 import * as Questionnaires from './Questionnaires';
-/* eslint-disable consistent-return, no-console */
+/* eslint-disable consistent-return, no-console, */
 export function jsonQuestion(Question) {
   const question = {
     id: Question.id,
@@ -47,7 +47,6 @@ export function create(data) {
   const {
     name, questionnaireId, type, order, options,
   } = body;
-
   DB.Questionnaire
     .findById(questionnaireId)
     .then((Questionnaire) => {
@@ -72,9 +71,9 @@ export function create(data) {
             questionId: Question.id,
             questionnaireId,
             options,
-            returnData,
-          });
-        }).then(Question => (returnData ? Question : res.status(200).send({ message: 'Successfully created a new question with options!' })))
+            returnData: true,
+          }).then(NewOptions => (returnData ? Question : res.status(200).send({ message: 'Successfully created a new question with options!', id: Question.id, options: NewOptions })));
+        })
         .catch((error) => {
           console.log(error);
 
