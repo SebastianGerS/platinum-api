@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'test';
-/* eslint-disable import/first, no-unused-vars */
+/* eslint-disable import/first, no-unused-vars, prefer-destructuring */
 // import server from './server';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -21,7 +21,6 @@ import JWT from 'jsonwebtoken';
 // /* Answer */
 // app.get('/answer', C.Answer.list);
 // app.post('/my-answer', C.Answer.create);
-
 // /* Questionnaires */
 // app.get('/questionnaires', authBearer(), C.Questionnaires.list);
 // app.get('/questionnaires/:questionnaireId', authBearer(), C.Questionnaires.findOne);
@@ -51,7 +50,6 @@ import JWT from 'jsonwebtoken';
 // /* Polls */
 // app.get('/polls', authBearer(), C.Polls.list);
 // app.get('/my-polls', authBearer(), C.Polls.find);
-// app.post('/my-polls', authBearer(), C.Polls.create);
 // app.put('/my-polls/:pollId', authBearer(), C.Polls.update);
 // app.delete('/my-polls/:pollId', authBearer(), C.Polls.destroy);
 // app.get('/polls/:pollId', C.Polls.findOne);
@@ -60,38 +58,13 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 describe('Routes', () => {
-  describe('GET /vote', () => {
-    it('It should get all the votes', (done) => {
-      chai.request('http://localhost:7770') // get this to work with server
-        .get('/vote')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('array');
-          done();
-        });
-    });
-  });
-
-  describe('POST /my-vote', () => {
-    it('It should create a vote', (done) => {
-      chai.request('http://localhost:7770') // get this to work with server
-        .post('/my-vote')
-        .send({
-          optionIds: [1],
-          questionId: 1,
-          pollId: 1,
-          answerId: 1,
-        })
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-  });
   let userId;
   let token;
   let questionnaireId;
+  let pollId;
+  let answerId;
+  let questionId;
+  let optionId;
   describe('POST /users', () => {
     it('It should create a user', (done) => {
       chai.request('http://localhost:7770') // get this to work with server
@@ -108,7 +81,7 @@ describe('Routes', () => {
           excludedPaths: [],
         })
         .end((err, res) => {
-          ({ userId } = res.body.userId);
+          userId = res.body.userId;
           res.should.have.status(201);
           res.body.should.be.a('object');
           done();
@@ -129,20 +102,7 @@ describe('Routes', () => {
           token,
         })
         .end((err, res) => {
-          ({ token } = res.body.token);
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-  });
-
-  describe('GET /questionnaires/:questionnaireId', () => {
-    it('It should get one questionnaire', (done) => {
-      chai.request('http://localhost:7770')
-        .get('/questionnaires/1')
-        .set('Authorization', `Bearer ${token}`)
-        .end((err, res) => {
+          token = res.body.token;
           res.should.have.status(200);
           res.body.should.be.a('object');
           done();
@@ -160,6 +120,83 @@ describe('Routes', () => {
         })
         .end((err, res) => {
           questionnaireId = res.body.id;
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('GET /questionnaires/:questionnaireId', () => {
+    it('It should get one questionnaire', (done) => {
+      chai.request('http://localhost:7770')
+        .get(`/questionnaires/${questionnaireId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('POST /questions', () => {
+    it('It should create one question', (done) => {
+      chai.request('http://localhost:7770')
+        .post('/questions')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'yes or no?', questionnaireId, type: 'select-one', order: 1, options: [{ name: 'Yes', order: 1 }, { name: 'No', order: 2 }],
+        })
+        .end((err, res) => {
+          questionId = res.body.id;
+          optionId = res.body.options[0].id;
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('POST /my-polls', () => {
+    it('It should create a poll', (done) => {
+      chai.request('http://localhost:7770')
+        .post('/my-polls')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ questionnaireId })
+        .end((err, res) => {
+          pollId = res.body.data.id;
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+  describe('POST /my-answer', () => {
+    it('It should create a poll', (done) => {
+      chai.request('http://localhost:7770')
+        .post('/my-answer')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ pollId })
+        .end((err, res) => {
+          answerId = res.body.data.id;
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+  describe('POST /my-vote', () => {
+    it('It should create a vote', (done) => {
+      chai.request('http://localhost:7770') // get this to work with server
+        .post('/my-vote')
+        .send({
+          optionIds: [optionId],
+          questionId,
+          pollId,
+          answerId,
+        })
+        .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           done();
