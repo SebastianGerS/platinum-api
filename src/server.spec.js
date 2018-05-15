@@ -172,6 +172,17 @@ describe('Routes', () => {
         });
     });
   });
+  describe('GET /polls/:pollId', () => {
+    it('It should get a poll', (done) => {
+      chai.request('http://localhost:7770')
+        .get(`/polls/${pollId}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
   describe('POST /my-answer', () => {
     it('It should create a poll', (done) => {
       chai.request('http://localhost:7770')
