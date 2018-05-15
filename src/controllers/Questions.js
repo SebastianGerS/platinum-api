@@ -22,6 +22,7 @@ export default {
     Questions.destroy({
       res,
       userId: req.user.dataValues.userId,
+      questionId: +req.params.questionId,
     });
   },
 };
