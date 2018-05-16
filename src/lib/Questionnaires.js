@@ -46,7 +46,18 @@ export function find(options) {
         as: 'Polls',
         where: { status: 'active' },
         required: false,
-      }],
+      },
+      {
+        model: DB.Question,
+        as: 'Questions',
+        required: false,
+        include: [{
+          model: DB.Option,
+          as: 'Options',
+          required: false,
+        }],
+      },
+      ],
     })
     .then((Questionnaires) => {
       const json = Questionnaires ? jsonQuestionnaires(Questionnaires) : null;
