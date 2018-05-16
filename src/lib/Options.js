@@ -6,13 +6,18 @@ import * as Questionnaires from './Questionnaires';
 /* eslint-disable consistent-return, no-console */
 
 export function jsonOption(Option) {
-  return {
+  const newOption = {
     id: Option.id,
     questionId: Option.questionId,
     name: Option.name,
     order: Option.order,
-    votes: Option.Votes.length,
   };
+
+  if (Option.Votes) {
+    newOption.votes = Option.Votes.length;
+  }
+
+  return newOption;
 }
 
 export function jsonOptions(Options) {
