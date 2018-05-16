@@ -30,7 +30,7 @@ export function create(data) {
     res, userId, questionId, questionnaireId, options, returnData,
   } = data;
 
-  DB.Questionnaire
+  return new Promise(resolve => DB.Questionnaire
     .findById(questionnaireId)
     .then((Questionnaire) => {
       if (!Questionnaire) { return res.status(400).send({ message: 'The questionnaire you tried to create options for does not exist' }); }
@@ -50,7 +50,7 @@ export function create(data) {
         .then((Options) => {
           if (!Options) { return res.status(400).send({ message: 'Options could not be created' }); }
 
-          return returnData ? Options : res.status(200).send({ message: 'Successfully created a new options!' });
+          return returnData ? resolve(Options) : res.status(200).send({ message: 'Successfully created a new options!' });
         })
         .catch((error) => {
           console.log(error);
@@ -61,7 +61,7 @@ export function create(data) {
       console.log(error);
 
       return res.status(400).send(error);
-    });
+    }));
 }
 export async function update(data) {
   const {
