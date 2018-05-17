@@ -89,10 +89,12 @@ export function create(data) {
 
 export function update(data) {
   const {
-    res, userId, body, questionId,
+    res, userId, body, questionId, returnData,
   } = data;
 
-  const { name, type, options } = body;
+  const {
+    name, type, order, options,
+  } = body;
 
   find({
     res,
@@ -116,11 +118,12 @@ export function update(data) {
         DB.Question.update({
           name,
           type,
+          order,
           updatedAt: new Date(),
         }, {
           where: { id: questionId },
         })
-          .then(() => {
+          .then((UpdatedQuestion) => {
             if (options) {
               return new Promise(resolve =>
                 Options.update({
@@ -131,11 +134,14 @@ export function update(data) {
                   options,
                   returnData: true,
                 })
-                  .then(() => resolve(res.status(200).send({ message: 'Successfully updated the question' })))
+                  .then(() => resolve(res.status(200).send({ message: 'Successfully updated the question and options' })))
                   .catch((error) => {
                     console.log(error);
                   }));
             }
+            if (returnData) return UpdatedQuestion;
+
+            return res.status(200).send({ message: 'Sucessfully updated the question' });
           })
           .catch((error) => {
             console.log(error);
@@ -171,7 +177,29 @@ export function destroy(options) {
         DB.Question
           .destroy({ where: { id: questionId } })
           .then((DeletedQuestion) => {
-            if (DeletedQuestion) { return res.status(200).send({ message: 'Successfully deleted a question!' }); }
+            if (!DeletedQuestion) { return res.status(400).send({ message: 'Question could not be deleted!' }); }
+            DB.Question
+              .findAll({
+                where: { questionnaireId: Question.questionnaireId },
+                order: [['order', 'ASC']],
+              })
+              .then(async (Questions) => {
+                const toBeUpdated = jsonQuestions(Questions).map((item, index) => {
+                  const itemToUpdate = item;
+                  itemToUpdate.order = index + 1;
+                  return itemToUpdate;
+                });
+                console.log(toBeUpdated);
+                toBeUpdated.map(async (questionToUpdate) => {
+                  const updatedQuestion = await update({
+                    res,
+                    body: questionToUpdate,
+                    userId,
+                    questionId: questionToUpdate.id,
+                  });
+                  return updatedQuestion;
+                }).then(() => res.status(200).send({ message: 'Successfully deleted a question!' }));
+              });
           })
           .catch((error) => {
             console.log(error);
