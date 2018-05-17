@@ -190,15 +190,16 @@ export function destroy(options) {
                   return itemToUpdate;
                 });
                 console.log(toBeUpdated);
-                toBeUpdated.map(async (questionToUpdate) => {
+                Promise.all(toBeUpdated.map(async (questionToUpdate) => {
                   const updatedQuestion = await update({
                     res,
                     body: questionToUpdate,
                     userId,
                     questionId: questionToUpdate.id,
+                    returnData: true,
                   });
                   return updatedQuestion;
-                }).then(() => res.status(200).send({ message: 'Successfully deleted a question!' }));
+                })).then(() => res.status(200).send({ message: 'Successfully deleted a question!' }));
               });
           })
           .catch((error) => {
