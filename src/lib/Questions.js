@@ -189,7 +189,6 @@ export function destroy(options) {
                   itemToUpdate.order = index + 1;
                   return itemToUpdate;
                 });
-                console.log(toBeUpdated);
                 Promise.all(toBeUpdated.map(async (questionToUpdate) => {
                   const updatedQuestion = await update({
                     res,
