@@ -33,10 +33,13 @@ export default (app) => {
   /* Questions */
 
   app.post('/questions', authBearer(), C.Questions.create);
+  app.put('/questions/:questionId', authBearer(), C.Questions.update);
+  app.delete('/questions/:questionId', authBearer(), C.Questions.destroy);
 
   /* Options */
 
   app.post('/options', authBearer(), C.Options.create);
+  app.delete('/questions/:questionId/options/:optionId', authBearer(), C.Options.destroy);
 
   /* Tests */
   app.get('/tests', C.Tests.list);

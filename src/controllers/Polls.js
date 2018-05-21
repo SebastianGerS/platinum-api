@@ -29,6 +29,7 @@ export default {
       jsonData: true,
       query: {
         userId: req.user.dataValues.userId,
+        status: 'closed',
       },
     });
   },

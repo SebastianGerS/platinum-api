@@ -40,12 +40,24 @@ export function find(options) {
   return DB.Questionnaire
     .findAll({
       where: query,
+      order: [['createdAt', 'DESC']],
       include: [{
         model: DB.Poll,
         as: 'Polls',
         where: { status: 'active' },
         required: false,
-      }],
+      },
+      {
+        model: DB.Question,
+        as: 'Questions',
+        required: false,
+        include: [{
+          model: DB.Option,
+          as: 'Options',
+          required: false,
+        }],
+      },
+      ],
     })
     .then((Questionnaires) => {
       const json = Questionnaires ? jsonQuestionnaires(Questionnaires) : null;
@@ -98,7 +110,7 @@ export function findOne(options) {
 export function create(options) {
   const { res, userId, body } = options;
   const {
-    title, type, question,
+    title, type,
   } = body;
 
   DB.Questionnaire
@@ -111,16 +123,9 @@ export function create(options) {
     })
     .then((Questionnaire) => {
       if (!Questionnaire) { return res.status(400).send({ message: 'Questionnaire could not be created' }); }
-      if (!question) { return res.status(200).send({ message: 'Questionnaire created!' }); }
 
-      question.questionnaireId = Questionnaire.id;
-
-      Questions.create({
-        res,
-        userId,
-        body: question,
-        returnData: true,
-      });
+      const data = jsonQuestionnaire(Questionnaire);
+      return res.status(200).json(data);
     }).then(Questionnaire => res.status(200).send({ message: 'Successfully created new questionnaire!' }))
     .catch((error) => {
       console.log(error);
@@ -184,12 +189,12 @@ export function destroy(options) {
     });
 }
 
-function jsonQuestionnaires(Questionnaires) {
+export function jsonQuestionnaires(Questionnaires) {
   return Questionnaires
     .map(Questionnaire => jsonQuestionnaire(Questionnaire));
 }
 
-function jsonQuestionnaire(Questionnaire) {
+export function jsonQuestionnaire(Questionnaire) {
   const json = {
     id: Questionnaire.id,
     title: Questionnaire.title,

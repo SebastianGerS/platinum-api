@@ -7,7 +7,7 @@ import * as Questionnaires from './Questionnaires';
 import uuidv4 from 'uuid/v4';
 
 export function jsonPoll(Poll) {
-  return {
+  const newPoll = {
     id: Poll.id,
     userId: Poll.userId,
     questionnaireId: Poll.questionnaireId,
@@ -19,8 +19,13 @@ export function jsonPoll(Poll) {
     createdAt: Poll.createdAt,
     updatedAt: Poll.updatedAt,
     closedAt: Poll.closedAt,
-
   };
+
+  if (Poll.Questionnaire) {
+    newPoll.questionnaire = Questionnaires.jsonQuestionnaire(Poll.Questionnaire);
+  }
+
+  return newPoll;
 }
 
 export function jsonPolls(Polls) {
@@ -62,7 +67,14 @@ export function find(options) {
     res, query, returnData, jsonData,
   } = options;
   return DB.Poll
-    .findAll({ where: query })
+    .findAll({
+      where: query,
+      include: [{
+        model: DB.Questionnaire,
+        as: 'Questionnaire',
+      }],
+      order: [[['closedAt', 'DESC']]],
+    })
     .then((Polls) => {
       const data = jsonData ? jsonPolls(Polls) : Polls;
 
@@ -80,7 +92,7 @@ export function find(options) {
 export function findOne(options) {
   const { res, where, returnData } = options;
 
-  return DB.Poll
+  return new Promise(resolve => DB.Poll
     .findOne({
       where,
     })
@@ -92,22 +104,31 @@ export function findOne(options) {
           id: Poll.questionnaireId,
           pollId: Poll.id,
         },
-      }).then(Questionnaire => res.status(200).json({
-        poll: {
-          id: Poll.id,
-          userId: Poll.userId,
-          link: Poll.link,
-          status: Poll.status,
-          maxNumOfVotes: Poll.maxNumOfVotes,
-          questionnaire: Questionnaire.json,
-        },
-      }));
+      }).then((Questionnaire) => {
+        const data = {
+          poll: {
+            id: Poll.id,
+            userId: Poll.userId,
+            link: Poll.link,
+            status: Poll.status,
+            maxNumOfVotes: Poll.maxNumOfVotes,
+            questionnaire: Questionnaire.json,
+          },
+        };
+        if (returnData) {
+          resolve(data.poll);
+        }
+        if (res) {
+          return res.status(200).json(data);
+        }
+      });
     })
     .catch((error) => {
       console.log(error);
 
+
       return returnData ? error : res.status(400).send(error);
-    });
+    }));
 }
 
 export function create(options) {

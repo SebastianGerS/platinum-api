@@ -11,7 +11,7 @@ export default (sequelize, DataTypes) => {
       required: true,
     },
     type: {
-      type: DataTypes.ENUM('select-one', 'multiselect', 'short-text'),
+      type: DataTypes.ENUM('select-one', 'multi-select', 'short-text'),
       required: true,
     },
     order: {

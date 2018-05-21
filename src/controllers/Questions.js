@@ -10,4 +10,20 @@ export default {
       returnData: false,
     });
   },
+  update(req, res) {
+    Questions.update({
+      res,
+      body: req.body,
+      userId: req.user.dataValues.userId,
+      questionId: +req.params.questionId,
+      returnData: false,
+    });
+  },
+  destroy(req, res) {
+    Questions.destroy({
+      res,
+      userId: req.user.dataValues.userId,
+      questionId: +req.params.questionId,
+    });
+  },
 };

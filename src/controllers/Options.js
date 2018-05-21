@@ -12,4 +12,12 @@ export default {
       returnData: false,
     });
   },
+  destroy(req, res) {
+    Options.destroy({
+      res,
+      userId: +req.user.dataValues.userId,
+      optionId: req.params.optionId,
+      questionId: req.params.questionId,
+    });
+  },
 };

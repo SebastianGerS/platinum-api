@@ -31,7 +31,8 @@ export default (sequelize, DataTypes) => {
 
     Poll.belongsTo(models.Questionnaire, {
       as: 'Questionnaire',
-      foreignKey: 'id',
+      foreignKey: 'questionnaireId',
+      targetKey: 'id',
     });
 
     Poll.hasMany(models.Answer, {
