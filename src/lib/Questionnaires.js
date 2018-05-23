@@ -1,10 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies, no-use-before-define,
- prefer-destructuring, radix, no-unused-vars, consistent-return, no-shadow, no-console */
+ prefer-destructuring, radix, consistent-return, no-shadow, no-console */
 
-import _ from 'lodash';
 import DB from '../models';
-import { filters, pageCount, orderBy } from '../helpers/Data';
-import { rand } from '../helpers/Math';
 import * as Questions from './Questions';
 import * as Polls from './Polls';
 
@@ -26,17 +23,9 @@ export function list(options) {
     });
 }
 
-export function pages({ query }) {
-  return DB.Questionnaire
-    .count({
-      col: 'id',
-    })
-    .then(count => pageCount(query, count));
-}
-
 export function find(options) {
   const {
-    res, returnData, query, params,
+    res, returnData, query,
   } = options;
 
   return DB.Questionnaire
@@ -165,7 +154,7 @@ export function create(options) {
 
       const data = jsonQuestionnaire(Questionnaire);
       return res.status(200).json(data);
-    }).then(Questionnaire => res.status(200).send({ message: 'Successfully created new questionnaire!' }))
+    }).then(() => res.status(200).send({ message: 'Successfully created new questionnaire!' }))
     .catch((error) => {
       console.log(error);
 
@@ -193,7 +182,7 @@ export function update(options) {
       }, {
         where: query,
       })
-        .then(Questionnaire => res.status(200).send({ message: 'Successfully updated the title - woho!' }))
+        .then(() => res.status(200).send({ message: 'Successfully updated the title - woho!' }))
         .catch((error) => {
           console.log(error);
 

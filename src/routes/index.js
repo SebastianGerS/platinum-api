@@ -23,7 +23,6 @@ export default (app) => {
   app.post('/my-answer', C.Answer.create);
 
   /* Questionnaires */
-  app.get('/questionnaires', authBearer(), C.Questionnaires.list);
   app.get('/questionnaires/:questionnaireId', authBearer(), C.Questionnaires.findOne);
   app.post('/my-questionnaires', authBearer(), C.Questionnaires.create);
   app.get('/my-questionnaires', authBearer(), C.Questionnaires.find);
