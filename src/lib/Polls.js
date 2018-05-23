@@ -33,27 +33,6 @@ export function jsonPolls(Polls) {
     .map(Poll => jsonPoll(Poll));
 }
 
-export function list(options) {
-  const {
-    res, returnData, jsonData,
-  } = options;
-
-  return DB.Poll
-    .findAll({})
-    .then((Polls) => {
-      const data = jsonData ? jsonPolls(Polls) : Polls;
-
-      if (returnData) return data;
-
-      return res.status(data ? 200 : 404).send(data);
-    })
-    .catch((error) => {
-      console.log(error);
-
-      return returnData ? error : res.status(400).send(error);
-    });
-}
-
 export function pages({ query }) {
   return DB.Poll
     .count({

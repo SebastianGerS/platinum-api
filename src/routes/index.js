@@ -50,7 +50,6 @@ export default (app) => {
   app.delete('/tests/:id', C.Tests.destroy);
 
   /* Polls */
-  app.get('/polls', authBearer(), C.Polls.list);
   app.get('/my-polls', authBearer(), C.Polls.find);
   app.post('/my-polls', authBearer(), C.Polls.create);
   app.put('/my-polls/:pollId', authBearer(), C.Polls.update);
