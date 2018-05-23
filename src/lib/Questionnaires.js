@@ -5,24 +5,6 @@ import DB from '../models';
 import * as Questions from './Questions';
 import * as Polls from './Polls';
 
-export function list(options) {
-  const {
-    res, returnData, jsonData,
-  } = options;
-
-  return DB.Questionnaire
-    .findAll({})
-    .then((Questionnaires) => {
-      const data = jsonData ? jsonQuestionnaires(Questionnaires) : Questionnaires;
-      if (returnData) return data;
-      return res.status(data ? 200 : 404).send(data);
-    })
-    .catch((error) => {
-      console.log(error);
-      return returnData ? error : res.status(400).send(error);
-    });
-}
-
 export function find(options) {
   const {
     res, returnData, query,
