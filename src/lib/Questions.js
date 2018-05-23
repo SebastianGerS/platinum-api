@@ -24,6 +24,23 @@ export function jsonQuestions(Questions) {
 export function find(options) {
   const { res, returnData, query } = options;
   return DB.Question
+    .findAll({
+      where: query,
+    })
+    .then((Questions) => {
+      const json = Questions ? jsonQuestions(Questions) : null;
+      if (returnData) return json;
+      return res.status(Questions ? 200 : 404).json(json);
+    })
+    .catch((error) => {
+      console.log(error);
+      return returnData ? error : res.status(400).send(error);
+    });
+}
+
+export function findOne(options) {
+  const { res, returnData, query } = options;
+  return DB.Question
     .findOne({
       where: query,
     })
@@ -96,7 +113,7 @@ export function update(data) {
     name, type, order, options,
   } = body;
 
-  find({
+  findOne({
     res,
     returnData: true,
     query: {
@@ -156,7 +173,7 @@ export function destroy(options) {
   const {
     res, userId, questionId,
   } = options;
-  find({
+  findOne({
     res,
     returnData: true,
     query: {
