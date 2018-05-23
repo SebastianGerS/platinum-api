@@ -116,6 +116,60 @@ export function findOne(options) {
       return returnData ? error : res.status(400).send(error);
     });
 }
+export function findOneWithPage(options) {
+  const {
+    res, returnData, query, params,
+  } = options;
+
+  const { page, limit } = params;
+
+  let offset;
+  if (page) {
+    offset = (page - 1) * limit;
+  }
+  Questions.find({
+    res,
+    returnData: true,
+    query: { questionnaireId: query.id },
+  }).then((Questions) => {
+    const morePages = (Questions.length / (page * limit)) > 1;
+    DB.Questionnaire
+      .findOne({
+        where: { id: query.id },
+        include: [{
+          model: DB.Question,
+          as: 'Questions',
+          offset,
+          limit,
+          separate: true,
+          order: [['order', 'ASC']],
+          include: [{
+            model: DB.Option,
+            as: 'Options',
+            separate: true,
+            order: [['order', 'ASC']],
+            include: [{
+              model: DB.Vote,
+              as: 'Votes',
+              through: { attributes: [] },
+              where: { pollId: query.pollId },
+              required: false,
+            }],
+          }],
+        }],
+      })
+      .then((Questionnaire) => {
+        const json = Questionnaire ? jsonQuestionnaire(Questionnaire) : null;
+
+        if (returnData) return { object: Questionnaire, json };
+        return res.status(Questionnaire ? 200 : 404).json({ json, morePages });
+      })
+      .catch((error) => {
+        console.log(error);
+        return returnData ? error : res.status(400).send(error);
+      });
+  });
+}
 
 export function create(options) {
   const { res, userId, body } = options;
@@ -136,7 +190,7 @@ export function create(options) {
 
       const data = jsonQuestionnaire(Questionnaire);
       return res.status(200).json(data);
-    }).then(() => res.status(200).send({ message: 'Successfully created new questionnaire!' }))
+    })
     .catch((error) => {
       console.log(error);
 

@@ -21,11 +21,12 @@ export default {
   },
 
   findOne(req, res) {
-    Questionnaires.findOne({
+    Questionnaires.findOneWithPage({
       res,
       query: {
         id: req.params.questionnaireId,
       },
+      params: req.query,
     });
   },
 
