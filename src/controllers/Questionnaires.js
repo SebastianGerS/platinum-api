@@ -36,11 +36,22 @@ export default {
   },
 
   find(req, res) {
-    Questionnaires.find({
+    Questionnaires.findWithPage({
       res,
       query: {
         userId: req.user.dataValues.userId,
       },
+      params: req.query,
+    });
+  },
+
+  findWithPage(req, res) {
+    Questionnaires.findWithPage({
+      res,
+      query: {
+        userId: req.user.dataValues.userId,
+      },
+      params: req.query,
     });
   },
 

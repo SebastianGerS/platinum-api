@@ -35,29 +35,13 @@ export function pages({ query }) {
 }
 
 export function find(options) {
-  const { res, returnData, query } = options;
+  const {
+    res, returnData, query, params,
+  } = options;
 
   return DB.Questionnaire
     .findAll({
       where: query,
-      order: [['createdAt', 'DESC']],
-      include: [{
-        model: DB.Poll,
-        as: 'Polls',
-        where: { status: 'active' },
-        required: false,
-      },
-      {
-        model: DB.Question,
-        as: 'Questions',
-        required: false,
-        include: [{
-          model: DB.Option,
-          as: 'Options',
-          required: false,
-        }],
-      },
-      ],
     })
     .then((Questionnaires) => {
       const json = Questionnaires ? jsonQuestionnaires(Questionnaires) : null;
@@ -69,6 +53,61 @@ export function find(options) {
       return returnData ? error : res.status(400).send(error);
     });
 }
+export function findWithPage(options) {
+  const {
+    res, returnData, query, params,
+  } = options;
+
+  const { page, limit } = params;
+
+  let offset;
+  if (page) {
+    offset = (page - 1) * limit;
+  }
+
+  find({
+    res,
+    returnData: true,
+    query,
+    params,
+  }).then((Questionnaires) => {
+    const morePages = (Questionnaires.json.length / (page * limit)) > 1;
+    DB.Questionnaire
+      .findAll({
+        where: query,
+        order: [['createdAt', 'DESC']],
+        offset,
+        limit,
+        include: [{
+          model: DB.Poll,
+          as: 'Polls',
+          where: { status: 'active' },
+          required: false,
+        },
+        {
+          model: DB.Question,
+          as: 'Questions',
+          required: false,
+          include: [{
+            model: DB.Option,
+            as: 'Options',
+            required: false,
+          }],
+        },
+        ],
+      })
+      .then((Questionnaires) => {
+        const json = Questionnaires ? jsonQuestionnaires(Questionnaires) : null;
+        if (returnData) return { object: Questionnaires, json };
+        return res.status(Questionnaires ? 200 : 404).json({ json, morePages });
+      })
+      .catch((error) => {
+        console.log(error);
+        return returnData ? error : res.status(400).send(error);
+      });
+  });
+}
+
 
 export function findOne(options) {
   const { res, returnData, query } = options;
