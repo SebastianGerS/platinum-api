@@ -24,13 +24,14 @@ export default {
   },
 
   find(req, res) {
-    Polls.find({
+    Polls.findWithPage({
       res,
       jsonData: true,
       query: {
         userId: req.user.dataValues.userId,
         status: 'closed',
       },
+      params: req.query,
     });
   },
 
