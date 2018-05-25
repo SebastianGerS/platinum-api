@@ -20,15 +20,11 @@ import JWT from 'jsonwebtoken';
 
 // /* Answer */
 // app.get('/answer', C.Answer.list);
-// /* Questionnaires */
-// app.get('/questionnaires', authBearer(), C.Questionnaires.list);
 
 // /* Options */
 
 // app.post('/options', authBearer(), C.Options.create);
 
-// /* Polls */
-// app.get('/polls', authBearer(), C.Polls.list);
 
 // above paths remain untestet
 /* note that all existing test are basic they do not

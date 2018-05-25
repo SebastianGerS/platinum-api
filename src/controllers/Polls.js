@@ -1,36 +1,16 @@
 import * as Polls from '../lib/Polls';
 
 export default {
-  list(req, res) {
-    Promise
-      .all([
-        Polls.list({
-          res,
-          query: req.query,
-          returnData: true,
-          jsonData: true,
-        }),
-        Polls.pages({ query: req.query }),
-      ])
-      .then((promises) => {
-        res.status(200).send({
-          rows: promises[0],
-          pages: promises[1],
-        });
-      })
-      .catch((error) => {
-        res.status(400).send(error);
-      });
-  },
 
   find(req, res) {
-    Polls.find({
+    Polls.findWithPage({
       res,
       jsonData: true,
       query: {
         userId: req.user.dataValues.userId,
         status: 'closed',
       },
+      params: req.query,
     });
   },
 

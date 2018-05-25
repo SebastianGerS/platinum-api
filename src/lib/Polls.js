@@ -33,27 +33,6 @@ export function jsonPolls(Polls) {
     .map(Poll => jsonPoll(Poll));
 }
 
-export function list(options) {
-  const {
-    res, returnData, jsonData,
-  } = options;
-
-  return DB.Poll
-    .findAll({})
-    .then((Polls) => {
-      const data = jsonData ? jsonPolls(Polls) : Polls;
-
-      if (returnData) return data;
-
-      return res.status(data ? 200 : 404).send(data);
-    })
-    .catch((error) => {
-      console.log(error);
-
-      return returnData ? error : res.status(400).send(error);
-    });
-}
-
 export function pages({ query }) {
   return DB.Poll
     .count({
@@ -69,11 +48,6 @@ export function find(options) {
   return DB.Poll
     .findAll({
       where: query,
-      include: [{
-        model: DB.Questionnaire,
-        as: 'Questionnaire',
-      }],
-      order: [[['closedAt', 'DESC']]],
     })
     .then((Polls) => {
       const data = jsonData ? jsonPolls(Polls) : Polls;
@@ -87,6 +61,50 @@ export function find(options) {
 
       return returnData ? error : res.status(400).send(error);
     });
+}
+export function findWithPage(options) {
+  const {
+    res, query, returnData, jsonData, params,
+  } = options;
+
+  const { page, limit } = params;
+
+  let offset;
+
+  if (page) {
+    offset = (page - 1) * limit;
+  }
+  find({
+    res,
+    query,
+    returnData: true,
+    jsonData: true,
+  }).then((PollsToBeCounted) => {
+    const morePages = (PollsToBeCounted.length / (page * limit)) > 1;
+    DB.Poll
+      .findAll({
+        where: query,
+        offset,
+        limit,
+        include: [{
+          model: DB.Questionnaire,
+          as: 'Questionnaire',
+        }],
+        order: [[['closedAt', 'DESC']]],
+      })
+      .then((Polls) => {
+        const json = jsonData ? jsonPolls(Polls) : Polls;
+
+        if (returnData) return json;
+
+        return res.status(json ? 200 : 404).send({ json, morePages });
+      })
+      .catch((error) => {
+        console.log(error);
+
+        return returnData ? error : res.status(400).send(error);
+      });
+  });
 }
 
 export function findOne(options) {
